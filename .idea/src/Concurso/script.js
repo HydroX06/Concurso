@@ -360,31 +360,31 @@ function answer(index){
 
         },1000)
 
-    } else{
+    } else {
 
         buttons[index].classList.add("incorrect")
         buttons[currentQuestion.correct].classList.add("correct")
 
         setTimeout(()=>{
 
-            lives--
+            if(shieldActive){
+                alert("¡El escudo te ha protegido!")
+                shieldActive = false
+                document.getElementById("escudoIcono").style.display = "none"
+            } else {
+                lives--
+            }
 
-            alert("Incorrecto.")
-
-            if(lives<=0){
-
+            if(lives <= 0){
                 alert("Has perdido.")
                 location.reload()
-
             }
 
             updateStats()
-
             resetBoosters()
-
             nextQuestion()
 
-        },1000)
+        }, 1000)
 
     }
 
@@ -425,6 +425,15 @@ function startTimer(){
 
 }
 
+function extraTime() {
+    timer += 15
+}
+
+function shield() {
+    shieldActive = true
+    document.getElementById("escudiIcono").style.display = "inline"
+}
+
 function plantar(){
 
     alert("Te plantas con "+ money + "€")
@@ -437,21 +446,48 @@ function fiftyFifty(){
     if(usosComodines.fiftyFifty > 0){
         usosComodines.fiftyFifty--
         document.getElementById("countFiftyFifty").innerText = usosComodines.fiftyFifty
-        // aplica el efecto del comodín
+
+        let buttons = document.querySelectorAll("#respuestas button")
+        let eliminadas = 0
+
+        buttons.forEach((btn, i) => {
+            if(i !== currentQuestion.correct && eliminadas < 2){
+                btn.disabled = true
+                btn.style.opacity = "0.3"
+                eliminadas++
+            }
+        })
+
     } else {
         alert("Ya no puedes usar este comodín en este tramo")
     }
 }
 
-function cambiarPregunta(){
-    if(usosComodines.cambiarPregunta > 0){
+function cambiarPregunta(){ // La pregunta se salta de dos en dos porque queria que dijera que no hay más del mismo nivel.
+    if(usosComodines.cambiarPregunta > 0) {
         usosComodines.cambiarPregunta--
         document.getElementById("countCambiarPregunta").innerText = usosComodines.cambiarPregunta
-        changeQuestion()
+
+        let level = levelOrder[currentLevelIndex]
+        let qList = questions[level]
+
+        if (qList.length === 0) {
+            alert("No hay más preguntas en esta etapa.")
+            return
+        }
+
+        currentQuestion = qList[Math.floor(Math.random() * qList.length)]
+        clearInterval(interval)
+        showQuestion()
+        startTimer()
+
+    } else if (qList.length === 1) {
+        alert("No hay más preguntas en esta etapa.")
     } else {
         alert("Ya no puedes usar este comodín en este tramo")
     }
 }
+
 function tiempoExtra(){
     if(usosComodines.tiempoExtra > 0){
         usosComodines.tiempoExtra--
