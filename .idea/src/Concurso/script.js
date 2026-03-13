@@ -13,6 +13,7 @@ let ruletaActiva = false
 let levelOrder = ["muyFacil","easy","medium","dificil","muyDificil"]
 let currentLevelIndex = 0
 let currentQuestionIndex = 0
+let preguntasJugadas = []
 
 const questions = {
 
@@ -213,7 +214,7 @@ let usosComodines = {
 
 function buyExtraUse(comodin){
 
-    let cost = 100  // puedes ajustar el precio
+    let cost = 100
     if(money < cost){
         alert("No tienes suficiente dinero")
         return
@@ -222,7 +223,7 @@ function buyExtraUse(comodin){
     money -= cost
     updateStats()
 
-    usedComodines[comodin] = false // se puede usar otra vez este comodín
+    usosComodines[comodin]++
     alert("Comprado extra para "+comodin)
 }
 
@@ -232,6 +233,7 @@ function comenzar(){
     currentQuestionIndex = 0
     money = 0
     lives = 3
+    preguntasJugadas = []
 
     updateStats()
 
@@ -241,17 +243,15 @@ function comenzar(){
 
 function showLevelScreen(){
 
-    // ocultar juego, mostrar el panel de tramo
     document.querySelector(".juego").style.display="none"
     document.getElementById("levelScreen").style.display="block"
     document.getElementById("levelMoney").innerText="Dinero actual: "+money+"€"
 
-    // Mostrar solo los comodines usados
     let div = document.getElementById("comprarComodines")
     div.innerHTML=""
 
-    for(let comodin in usedComodines){
-        if(usedComodines[comodin]){
+    for(let comodin in usosComodines){
+        if(usosComodines[comodin] === 0){
             div.innerHTML += `<button onclick="buyExtraUse('${comodin}')">Comprar extra para ${comodin}</button>`
         }
     }
@@ -264,20 +264,17 @@ function nextQuestion(){
     let qList = questions[level]
 
     if(currentQuestionIndex >= qList.length){
-
         clearInterval(interval)
-
         showLevelScreen()
-
         return
     }
 
-    currentQuestion = qList[currentQuestionIndex]
+    preguntasJugadas.push(currentQuestionIndex) // ← guarda el índice actual antes de usarlo
 
+    currentQuestion = qList[currentQuestionIndex]
     currentQuestionIndex++
 
     showQuestion()
-
     startTimer()
 
 }
@@ -285,18 +282,16 @@ function nextQuestion(){
 function continueGame(){
 
     document.getElementById("levelScreen").style.display="none"
-
     document.querySelector(".juego").style.display="block"
 
     currentLevelIndex++
     currentQuestionIndex=0
+    preguntasJugadas = []
 
     if(currentLevelIndex>=levelOrder.length){
 
         alert("¡Has ganado el juego con "+money+"€!")
-
         location.reload()
-
         return
     }
 
@@ -314,10 +309,8 @@ function showQuestion(){
     let answers=[...currentQuestion.a]
 
     if(extraAnswersActive){
-
         answers.push("Respuesta falsa")
         answers.push("Otra respuesta falsa")
-
     }
 
     answers.forEach((a,i)=>{
@@ -325,7 +318,6 @@ function showQuestion(){
         let btn=document.createElement("button")
         btn.innerText=a
         btn.onclick=()=>answer(i)
-
         answersDiv.appendChild(btn)
 
     })
@@ -351,11 +343,8 @@ function answer(index){
         setTimeout(()=>{
 
             alert("Correcto +"+reward+"€")
-
             updateStats()
-
             resetBoosters()
-
             nextQuestion()
 
         },1000)
@@ -370,7 +359,7 @@ function answer(index){
             if(shieldActive){
                 alert("¡El escudo te ha protegido!")
                 shieldActive = false
-                document.getElementById("escudoIcono").style.display = "none"
+                document.getElementById("escudoIcono").style.visibility = "hidden"
             } else {
                 lives--
             }
@@ -412,11 +401,8 @@ function startTimer(){
         if(timer<=0){
 
             clearInterval(interval)
-
             lives--
-
             updateStats()
-
             nextQuestion()
 
         }
@@ -425,11 +411,11 @@ function startTimer(){
 
 }
 
-function extraTime() {
+function extraTime(){
     timer += 15
 }
 
-function shield() {
+function shield(){
     shieldActive = true
     document.getElementById("escudoIcono").style.visibility = "visible"
 }
@@ -437,7 +423,6 @@ function shield() {
 function plantar(){
 
     alert("Te plantas con "+ money + "€")
-
     location.reload()
 
 }
@@ -463,26 +448,28 @@ function fiftyFifty(){
     }
 }
 
-function cambiarPregunta(){ // La pregunta se salta de dos en dos porque queria que dijera que no hay más del mismo nivel.
-    if(usosComodines.cambiarPregunta > 0) {
-        usosComodines.cambiarPregunta--
-        document.getElementById("countCambiarPregunta").innerText = usosComodines.cambiarPregunta
+function cambiarPregunta(){
+    if(usosComodines.cambiarPregunta > 0){
 
         let level = levelOrder[currentLevelIndex]
         let qList = questions[level]
+        let disponibles = qList.filter((_, i) => !preguntasJugadas.includes(i))
 
-        if (qList.length === 0) {
-            alert("No hay más preguntas en esta etapa.")
+        if(disponibles.length === 0){
+            alert("No hay más preguntas en este tramo")
             return
         }
 
-        currentQuestion = qList[Math.floor(Math.random() * qList.length)]
+        usosComodines.cambiarPregunta--
+        document.getElementById("countCambiarPregunta").innerText = usosComodines.cambiarPregunta
+
+        currentQuestion = disponibles[Math.floor(Math.random() * disponibles.length)]
+        preguntasJugadas.push(questions[levelOrder[currentLevelIndex]].indexOf(currentQuestion))
+
         clearInterval(interval)
         showQuestion()
         startTimer()
 
-    } else if (qList.length === 1) {
-        alert("No hay más preguntas en esta etapa.")
     } else {
         alert("Ya no puedes usar este comodín en este tramo")
     }
@@ -511,7 +498,6 @@ function dobleOportunidad(){
 function respuestasExtra(){
 
     extraAnswersActive=true
-
     alert("Las próximas respuestas tendrán opciones extra")
 
 }
@@ -519,7 +505,6 @@ function respuestasExtra(){
 function doblePuntos(){
 
     doublePointsActive=true
-
     alert("La próxima pregunta tendrá puntos dobles")
 
 }
@@ -527,7 +512,6 @@ function doblePuntos(){
 function ruleta(win){
 
     let buena=["+1 vida", "Ganas 200€", "Tiempo +20s", "Ganas 500€"]
-
     let mala=["-1 vida", "Pierdes 200€", "Tiempo -10s", "Pierdes 500€"]
 
     let result
@@ -539,11 +523,13 @@ function ruleta(win){
     }
 
     if(result == "+1 vida")      lives++
-    if(result == "+200€")        money += 200
-    if(result == "Tiempo +20")   timer += 20
+    if(result == "Ganas 200€")   money += 200
+    if(result == "Tiempo +20s")  timer += 20
+    if(result == "Ganas 500€")   money += 500
     if(result == "-1 vida")      lives--
     if(result == "Pierdes 200€") money -= 200
-    if(result == "Tiempo -10")   timer -= 10
+    if(result == "Tiempo -10s")  timer -= 10
+    if(result == "Pierdes 500€") money -= 500
 
     alert("Ruleta: "+result)
 
@@ -561,13 +547,11 @@ let sectores = [
 ]
 
 function spinRuleta(){
-    // resultado aleatorio
-    let index = Math.floor(Math.random()*sectores.length)
 
+    let index = Math.floor(Math.random()*sectores.length)
     let resultado = sectores[index]
     document.getElementById("ruletaResultado").innerText = "Resultado: "+resultado.texto
 
-    // Aplica el efecto:
     if(resultado.tipo=="dinero"){
         money += resultado.valor
         updateStats()
@@ -585,7 +569,6 @@ function girarRuleta(){
     let win = Math.random() > 0.5
     ruleta(win)
     ruletaActiva=true
-
 }
 
 function resetBoosters(){
@@ -593,5 +576,4 @@ function resetBoosters(){
     doublePointsActive=false
     extraAnswersActive=false
     ruletaActiva=false
-
 }
