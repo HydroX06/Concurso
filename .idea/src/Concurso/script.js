@@ -431,7 +431,7 @@ function extraTime() {
 
 function shield() {
     shieldActive = true
-    document.getElementById("escudiIcono").style.display = "inline"
+    document.getElementById("escudoIcono").style.visibility = "visible"
 }
 
 function plantar(){
