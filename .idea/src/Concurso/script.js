@@ -453,7 +453,9 @@ function cambiarPregunta(){
 
         let level = levelOrder[currentLevelIndex]
         let qList = questions[level]
-        let disponibles = qList.filter((_, i) => !preguntasJugadas.includes(i))
+        let disponibles = qList
+            .map((q, i) => ({q, i}))
+            .filter(({i}) => !preguntasJugadas.includes(i))
 
         if(disponibles.length === 0){
             alert("No hay más preguntas en este tramo")
@@ -463,8 +465,9 @@ function cambiarPregunta(){
         usosComodines.cambiarPregunta--
         document.getElementById("countCambiarPregunta").innerText = usosComodines.cambiarPregunta
 
-        currentQuestion = disponibles[Math.floor(Math.random() * disponibles.length)]
-        preguntasJugadas.push(questions[levelOrder[currentLevelIndex]].indexOf(currentQuestion))
+        let elegida = disponibles[Math.floor(Math.random() * disponibles.length)]
+        preguntasJugadas.push(elegida.i)
+        currentQuestion = elegida.q
 
         clearInterval(interval)
         showQuestion()
