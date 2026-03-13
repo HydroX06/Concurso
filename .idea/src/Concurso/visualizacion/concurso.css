@@ -1,0 +1,95 @@
+body {
+    font-family: Arial;
+    background:#0c0f2b;
+    color:white;
+    text-align:center;
+}
+
+.juego {
+    width:700px;
+    margin:auto;
+}
+
+.questionBox {
+    background:#1a1f4b;
+    padding:20px;
+    border-radius:10px;
+    margin-top:20px;
+}
+
+#respuestas {
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:10px;
+    margin-top:20px;
+}
+
+button {
+    box-shadow: 2px 2px 4px #43ff34;
+    padding:12px;
+    border:none;
+    border-radius:8px;
+    cursor:pointer;
+    font-size:16px;
+    cursor:pointer;
+    transition: 0.3s;
+}
+
+.incorrect {
+    background-color:#e74c3c !important; /* rojo */
+    color:white;
+}
+
+.correct {
+    background-color: #2ecc71 !important; /* Verde */
+    color: white;
+}
+
+#respuestas button {
+    background:#2d3cff;
+    color:white;
+}
+
+#respuestas button:hover {
+    background:#5865ff;
+}
+
+.lifelines button {
+    background:#ff9800;
+    margin:5px;
+}
+
+.potenciadores button {
+    background:#9c27b0;
+    margin:5px;
+}
+
+.controls button {
+    background:#00c853;
+    margin:10px;
+}
+
+.stats {
+    display:flex;
+    justify-content:space-around;
+    font-size:20px;
+}
+
+#escudoIcono {
+    visibility: hidden;
+}
+
+#levelScreen {
+    position:fixed;
+    top:0;
+    left:0;
+    width:100%;
+    height:100%;
+    background:#111;
+    color:white;
+    display:flex;
+    flex-direction:column;
+    justify-content:center;
+    align-items:center;
+    font-size:30px;
+}

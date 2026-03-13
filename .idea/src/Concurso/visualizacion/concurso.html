@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Inversión Arriesgada</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+
+<body>
+    <h1>Inversión Arriesgada 💸</h1>
+    <div class="juego">
+        <div class="stats">
+            <p>💰 Dinero: <span id="money">0</span> €</p>
+            <p>❤️ Vidas: <span id="lives">3</span></p>
+            <p><span id="escudoIcono">🛡️</span></p>
+            <p>⏱ Tiempo: <span id="timer">30</span>s</p>
+    </div>
+    <div class="questionBox">
+    <h2 id="question">Pulsa empezar</h2>
+    <div id="respuestas"></div>
+    </div>
+
+    <div class="controls">
+    <button onclick="comenzar()">Empezar</button>
+    <button onclick="plantar()">Plantarse</button>
+    </div>
+
+    <h3>Comodines</h3>
+
+    <div class="lifelines">
+        <button id="btnFiftyFifty" onclick="fiftyFifty()">50:50 (<span id="countFiftyFifty">1</span>)</button>
+        <button id="btnCambiarPregunta" onclick="cambiarPregunta()">Cambiar pregunta (<span id="countCambiarPregunta">1</span>)</button>
+        <button id="btnTiempoExtra" onclick="tiempoExtra()">Tiempo Extra (<span id="countTiempoExtra">1</span>)</button>
+        <button id="btnDobleOportunidad" onclick="dobleOportunidad()">Doble Oportunidad (<span id="countDobleOportunidad">1</span>)</button>
+    </div>
+
+    <h3>Potenciadores (ANTES de ver pregunta)</h3>
+
+    <div class="potenciadores">
+    <button onclick="respuestasExtra()">Añadir respuestas</button>
+    <button onclick="doblePuntos()">Doble puntuación</button>
+    <button onclick="girarRuleta()">Modo ruleta</button>
+    </div>
+
+    </div>
+
+    <div id="levelScreen" style="display:none">
+
+        <h2>Fin del tramo</h2>
+
+        <p id="levelMoney"></p>
+
+        <h3>¿Qué quieres hacer?</h3>
+
+        <button onclick="continueGame()">Continuar</button>
+        <button onclick="plantar()">Plantarse</button>
+
+        <h3>Potenciadores para la próxima pregunta</h3>
+
+        <button onclick="respuestasExtra()">Añadir respuestas</button>
+        <button onclick="doblePuntos()">Doble puntuación</button>
+        <button onclick="girarRuleta()">Modo ruleta</button>
+
+        <h3>Comprar comodines usados</h3>
+        <div id="comprarComodines"></div>
+
+        <h3>Girar Ruleta</h3>
+        <div id="ruletaContainer">
+            <canvas id="ruleta" width="300" height="300"></canvas>
+            <button onclick="spinRuleta()">Girar Ruleta</button>
+        </div>
+        <p id="ruletaResultado"></p>
+
+    </div>
+
+    <script src="script.js"></script>
+
+</body>
+</html>
