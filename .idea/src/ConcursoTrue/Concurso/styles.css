@@ -45,6 +45,11 @@ button {
     color: white;
 }
 
+.oculto {
+    opacity: 0.3;
+    pointer-events: none;
+}
+
 #respuestas button {
     background:#2d3cff;
     color:white;
@@ -73,10 +78,6 @@ button {
     display:flex;
     justify-content:space-around;
     font-size:20px;
-}
-
-#escudoIcono {
-    visibility: hidden;
 }
 
 #levelScreen {

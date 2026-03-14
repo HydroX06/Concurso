@@ -6,7 +6,7 @@ let interval
 let currentQuestion
 let shieldActive = false
 
-let doublePointsActive = false
+let modoPruebaComodines = false
 let extraAnswersActive = false
 let ruletaActiva = false
 
@@ -23,7 +23,7 @@ const levelNames = {
 const questions = {
     muyFacil: [
         { q:"¿Qué lenguaje se usa mucho para hacer páginas web interactivas junto con HTML y CSS?", a:["JavaScript","C#","Pascal","Swift"], correct:0, reward:100 },
-        { q:"¿Qué etiqueta HTML se usa para crear un enlace?", a:["<img>","<link>","<a>","<href>"], correct:2, reward:100 },
+        { q:"¿Qué etiqueta HTML se usa para crear un enlace?", a:["<a>","<link>","<a>","<href>"], correct:2, reward:100 },
         { q:"¿Cuál es el océano más grande?", a:["Atlántico","Índico","Ártico","Pacífico"], correct:3, reward:100 },
         { q:"¿Qué estrella está en el centro del sistema solar?", a:["La Luna","El Sol","Marte","Júpiter"], correct:1, reward:100 },
         { q:"¿Cuántas patas tiene una araña?", a:["6","8","10","12"], correct:1, reward:100 },
@@ -218,7 +218,7 @@ function answer(index){
     let buttons = document.querySelectorAll("#respuestas button")
     clearInterval(interval)
 
-    if(index == currentQuestion.correct){
+    if(index === currentQuestion.correct){
         buttons[index].classList.add("correct")
         let reward = currentQuestion.reward
         if(doublePointsActive) reward *= 2
@@ -288,70 +288,110 @@ function plantar(){
 }
 
 function fiftyFifty(){
-    if(usosComodines.fiftyFifty > 0){
-        usosComodines.fiftyFifty--
-        document.getElementById("countFiftyFifty").innerText = usosComodines.fiftyFifty
+    if(usosComodines.fiftyFifty > 0 || modoPruebaComodines){
+
+        if(!modoPruebaComodines){
+            usosComodines.fiftyFifty--
+            document.getElementById("countFiftyFifty").innerText = usosComodines.fiftyFifty
+        }
+
         let buttons = document.querySelectorAll("#respuestas button")
         let eliminadas = 0
-        buttons.forEach((btn, i)=>{
-            if(i !== currentQuestion.correct && eliminadas < 2){
-                btn.disabled = true
-                btn.style.opacity = "0.2"
+
+        for(let i = 0; i < buttons.length; i++){
+            if(i !== currentQuestion.correct && eliminadas < 2) {
+                buttons[i].disabled = true
+                buttons[i].style.opacity = "0.3"
                 eliminadas++
             }
-        })
+        }
     } else {
-        alert("⚠ Módulo 50:50 agotado")
+        alert("Ya no puedes usar este comodín en este tramo.")
     }
 }
 
 function cambiarPregunta(){
-    if(usosComodines.cambiarPregunta > 0){
+    if (usosComodines.cambiarPregunta > 0 || modoPruebaComodines) {
+
+        if(!modoPruebaComodines){
+            usosComodines.cambiarPregunta--
+            document.getElementById("countCambiarPregunta").innerText = usosComodines.cambiarPregunta
+        }
+        let level = levelOrder[currentLevelIndex]
+        let qList = questions[level]
+        let disponibles = []
+
+        for(let i = 0; i < qList.length; i++){
+            if(!preguntasJugadas.includes(i))   {
+                disponibles.push(qList[i])
+            }
+        }
+
+        if (disponibles.length === 0) {
+            alert("No hay más preguntas en este tramo.")
+            return
+        }
+
         usosComodines.cambiarPregunta--
         document.getElementById("countCambiarPregunta").innerText = usosComodines.cambiarPregunta
+
+        let elegida = disponibles[Math.floor(Math.random() * disponibles.length)]
+        preguntasJugadas.push(elegida.i)
+        currentQuestion = elegida.q
+
         clearInterval(interval)
-        // Skip to next question without penalty
-        currentQuestionIndex++
-        if(currentQuestionIndex >= questions[levelOrder[currentLevelIndex]].length){
-            showLevelScreen()
-        } else {
-            currentQuestion = questions[levelOrder[currentLevelIndex]][currentQuestionIndex - 1]
-            if(currentQuestion.pregunta) currentQuestion.q = currentQuestion.pregunta
-            if(currentQuestion.respuestas) currentQuestion.a = currentQuestion.respuestas
-            if(currentQuestion.correcta !== undefined) currentQuestion.correct = currentQuestion.correcta
-            if(currentQuestion.recompensa) currentQuestion.reward = currentQuestion.recompensa
-            showQuestion()
-            startTimer()
-        }
+        showQuestion()
+        startTimer()
+
     } else {
-        alert("⚠ Módulo CAMBIAR agotado")
+        alert("Ya no puedes usar este comodín en este tramo.")
     }
 }
-
 function tiempoExtra(){
-    if(usosComodines.tiempoExtra > 0){
-        usosComodines.tiempoExtra--
-        document.getElementById("countTiempoExtra").innerText = usosComodines.tiempoExtra
+    if(usosComodines.tiempoExtra > 0 || modoPruebaComodines){
+
+        if(!modoPruebaComodines){
+            usosComodines.tiempoExtra--
+            document.getElementById("countTiempoExtra").innerText = usosComodines.tiempoExtra
+        }
+
         extraTime()
-        document.getElementById("timer").innerText = timer
+
     } else {
-        alert("⚠ Módulo TIEMPO EXTRA agotado")
+        alert("Ya no puedes usar este comodín en este tramo")
     }
 }
 
 function dobleOportunidad(){
-    if(usosComodines.dobleOportunidad > 0){
-        usosComodines.dobleOportunidad--
-        document.getElementById("countDobleOportunidad").innerText = usosComodines.dobleOportunidad
+    if(usosComodines.dobleOportunidad > 0 || modoPruebaComodines){
+
+        if(!modoPruebaComodines){
+            usosComodines.dobleOportunidad--
+            document.getElementById("countDobleOportunidad").innerText = usosComodines.dobleOportunidad
+        }
+
         shield()
+
     } else {
-        alert("⚠ Módulo ESCUDO agotado")
+        alert("Ya no puedes usar este comodín en este tramo.")
     }
 }
 
-function respuestasExtra(){
-    extraAnswersActive = true
-    alert("◉ Modo respuestas extra activado")
+function modoPrueba(){
+
+    let coste = 300  // precio del potenciador
+
+    if(money < coste){
+        alert("No tienes suficiente dinero")
+        return
+    }
+
+    money -= coste
+    modoPruebaComodines = true
+
+    updateStats()
+
+    alert("◉ Modo prueba activado: puedes usar comodines sin gastar usos en esta pregunta")
 }
 
 function doblePuntos(){
@@ -375,9 +415,9 @@ function spinRuleta(){
     let index = Math.floor(Math.random() * sectores.length)
     let resultado = sectores[index]
     document.getElementById("ruletaResultado").innerText = "▶ " + resultado.texto
-    if(resultado.tipo=="dinero"){ money += resultado.valor; updateStats() }
-    else if(resultado.tipo=="vida"){ lives = Math.max(0, lives + resultado.valor); updateStats() }
-    else if(resultado.tipo=="tiempo"){ timer += resultado.valor }
+    if(resultado.tipo==="dinero"){ money += resultado.valor; updateStats() }
+    else if(resultado.tipo==="vida"){ lives = Math.max(0, lives + resultado.valor); updateStats() }
+    else if(resultado.tipo==="tiempo"){ timer += resultado.valor }
 }
 
 function girarRuleta(){

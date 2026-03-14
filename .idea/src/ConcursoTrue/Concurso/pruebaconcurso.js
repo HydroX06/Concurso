@@ -11,7 +11,6 @@ let currentQuestion
 let shieldActive = false
 
 let doublePointsActive  = false
-let extraAnswersActive  = false
 let ruletaActiva        = false
 
 let levelOrder = ["muyFacil","easy","medio","dificil","muyDificil"]
@@ -365,58 +364,128 @@ function showVictoryScreen(){
 
 /* ═══════════════ COMODINES ════════════════════════ */
 function extraTime(){ timer += 15 }
-function shield(){
+function escudo(){
     shieldActive = true
     document.getElementById("escudoIcono").style.visibility = "visible"
 }
 
 function fiftyFifty(){
-    if(usosComodines.fiftyFifty > 0){
-        usosComodines.fiftyFifty--; refreshComodinCounts()
-        const buttons = document.querySelectorAll("#respuestas button")
+    if(usosComodines.fiftyFifty > 0 || modoPruebaComodines){
+
+        if(!modoPruebaComodines){
+            usosComodines.fiftyFifty--
+            document.getElementById("countFiftyFifty").innerText = usosComodines.fiftyFifty
+        }
+
+        let buttons = document.querySelectorAll("#respuestas button")
         let eliminadas = 0
-        buttons.forEach((btn, i) => {
-            if(i !== currentQuestion.correct && eliminadas < 2){ btn.disabled=true; btn.style.opacity="0.2"; eliminadas++ }
-        })
-        showToast("◈ 50:50 activado", "info")
-    } else { showToast("⚠ 50:50 agotado", "error") }
+
+        for(let i = 0; i < buttons.length; i++){
+            if(i !== currentQuestion.correct && eliminadas < 2) {
+                buttons[i].disabled = true
+                buttons[i].style.opacity = "0.3"
+                eliminadas++
+            }
+        }
+    } else {
+        alert("Ya no puedes usar este comodín en este tramo.")
+    }
 }
 
-function cambiarPregunta(){
-    if(usosComodines.cambiarPregunta > 0){
-        usosComodines.cambiarPregunta--; refreshComodinCounts()
-        clearInterval(interval)
-        if(currentQuestionIndex >= questions[levelOrder[currentLevelIndex]].length){ showLevelScreen(); return }
-        currentQuestion = questions[levelOrder[currentLevelIndex]][currentQuestionIndex]
-        currentQuestionIndex++
-        showQuestion(); startTimer()
-        showToast("↺ Pregunta cambiada", "info")
-    } else { showToast("⚠ Cambio agotado", "error") }
+function comodinesInfinitos(){
+
+    let coste = 300  // precio del potenciador
+
+    if(money < coste){
+        alert("No tienes suficiente dinero")
+        return
+    }
+
+    money -= coste
+    modoPruebaComodines = true
+
+    updateStats()
+
+    alert("Comodines infinitos activado: puedes usar comodines sin gastar usos en esta pregunta")
 }
 
 function tiempoExtra(){
-    if(usosComodines.tiempoExtra > 0){
-        usosComodines.tiempoExtra--; refreshComodinCounts()
-        timer += 15; document.getElementById("timer").innerText = timer
-        showToast("⊕ +15 segundos añadidos", "info")
-    } else { showToast("⚠ Tiempo extra agotado", "error") }
+    if(usosComodines.tiempoExtra > 0 || modoPruebaComodines){
+
+        if(!modoPruebaComodines){
+            usosComodines.tiempoExtra--
+            document.getElementById("countTiempoExtra").innerText = usosComodines.tiempoExtra
+        }
+
+        extraTime()
+
+    } else {
+        alert("Ya no puedes usar este comodín en este tramo")
+    }
 }
 
 function dobleOportunidad(){
-    if(usosComodines.dobleOportunidad > 0){
-        usosComodines.dobleOportunidad--; refreshComodinCounts()
-        shield(); showToast("⬡ Escudo activado", "shield")
-    } else { showToast("⚠ Escudo agotado", "error") }
+    if(usosComodines.dobleOportunidad > 0 || modoPruebaComodines){
+
+        if(!modoPruebaComodines){
+            usosComodines.dobleOportunidad--
+            document.getElementById("countDobleOportunidad").innerText = usosComodines.dobleOportunidad
+        }
+
+        escudo()
+
+    } else {
+        alert("Ya no puedes usar este comodín en este tramo.")
+    }
 }
 
-function respuestasExtra(){ extraAnswersActive = true; showToast("◉ Respuestas extra activadas", "info") }
 function doblePuntos()     { doublePointsActive = true; showToast("✦ Doble puntos activados",    "info") }
+
+/* ═══════════════ POTENCIADORES ════════════════════════ */
+
 function girarRuleta()     { ruletaActiva = true;       showToast("⟳ Modo ruleta — úsalo en fin de tramo", "info") }
 
 function resetBoosters(){
     doublePointsActive = false
-    extraAnswersActive = false
     ruletaActiva       = false
+}
+
+function cambiarPregunta(){
+    if (usosComodines.cambiarPregunta > 0 || modoPruebaComodines) {
+
+        if(!modoPruebaComodines){
+            usosComodines.cambiarPregunta--
+            document.getElementById("countCambiarPregunta").innerText = usosComodines.cambiarPregunta
+        }
+        let level = levelOrder[currentLevelIndex]
+        let qList = questions[level]
+        let disponibles = []
+
+        for(let i = 0; i < qList.length; i++){
+            if(!preguntasJugadas.includes(i))   {
+                disponibles.push(qList[i])
+            }
+        }
+
+        if (disponibles.length === 0) {
+            alert("No hay más preguntas en este tramo.")
+            return
+        }
+
+        usosComodines.cambiarPregunta--
+        document.getElementById("countCambiarPregunta").innerText = usosComodines.cambiarPregunta
+
+        let elegida = disponibles[Math.floor(Math.random() * disponibles.length)]
+        preguntasJugadas.push(elegida.i)
+        currentQuestion = elegida.q
+
+        clearInterval(interval)
+        showQuestion()
+        startTimer()
+
+    } else {
+        alert("Ya no puedes usar este comodín en este tramo.")
+    }
 }
 
 /* ═══════════════ RULETA CANVAS ════════════════════ */

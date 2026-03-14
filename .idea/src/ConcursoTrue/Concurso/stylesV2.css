@@ -1,8 +1,3 @@
-/* ═══════════════════════════════════════════════════
-   INVERSIÓN ARRIESGADA — RETRO-FUTURISTIC UI
-   Inspired by Cyberpunk 2077 / Blade Runner / HUD FUI
-   ═══════════════════════════════════════════════════ */
-
 @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;600;700;900&family=Share+Tech+Mono&family=Rajdhani:wght@300;400;600;700&display=swap');
 
 :root {
@@ -21,7 +16,7 @@
     --glow-y:    0 0 8px var(--yellow), 0 0 20px rgba(245,230,66,0.4);
 }
 
-/* ── Reset & Base ──────────────────────────────────── */
+
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
 body {
@@ -33,7 +28,6 @@ body {
     position: relative;
 }
 
-/* ── Animated starfield background ────────────────── */
 body::before {
     content: '';
     position: fixed;
@@ -58,7 +52,7 @@ body::before {
     to   { opacity: 1; }
 }
 
-/* ── CRT scanlines overlay ─────────────────────────── */
+
 body::after {
     content: '';
     position: fixed;
@@ -80,7 +74,7 @@ body::after {
     100% { background-position: 0 100px; }
 }
 
-/* ── HUD corner decorators ─────────────────────────── */
+
 .hud-corner {
     position: fixed;
     width: 60px; height: 60px;
@@ -101,7 +95,7 @@ body::after {
 .hud-corner.bl { bottom: 12px; left: 12px; transform: scaleY(-1); }
 .hud-corner.br { bottom: 12px; right: 12px; transform: scale(-1); }
 
-/* ── Page title ────────────────────────────────────── */
+
 .page-header {
     position: relative;
     z-index: 10;
@@ -136,7 +130,7 @@ body::after {
     text-transform: uppercase;
 }
 
-/* ── Main game container ───────────────────────────── */
+
 .juego {
     width: min(740px, 96vw);
     margin: 0 auto;
@@ -145,7 +139,7 @@ body::after {
     padding-bottom: 40px;
 }
 
-/* ── HUD Panel base ────────────────────────────────── */
+
 .hud-panel {
     background: var(--panel);
     border: 1px solid var(--border);
@@ -163,7 +157,7 @@ body::after {
     pointer-events: none;
 }
 
-/* ── Stats bar ─────────────────────────────────────── */
+
 .stats {
     display: flex;
     justify-content: space-around;
@@ -207,7 +201,7 @@ body::after {
     opacity: 0.4;
 }
 
-/* ── Question box ──────────────────────────────────── */
+
 .questionBox {
     margin-top: 16px;
     padding: 28px 32px 32px;
@@ -233,7 +227,7 @@ body::after {
     min-height: 48px;
 }
 
-/* ── Answer buttons ────────────────────────────────── */
+
 #respuestas {
     display: grid;
     grid-template-columns: 1fr 1fr;
@@ -276,7 +270,7 @@ body::after {
     transform: translateY(-2px);
 }
 
-/* ── Correct / Incorrect states ────────────────────── */
+
 .correct {
     background: rgba(0, 255, 80, 0.15) !important;
     border-color: var(--green) !important;
@@ -309,7 +303,7 @@ body::after {
 
 .oculto { opacity: 0.2; pointer-events: none; }
 
-/* ── Section headings ──────────────────────────────── */
+
 .section-title {
     font-family: 'Orbitron', sans-serif;
     font-size: 0.65rem;
@@ -335,7 +329,7 @@ body::after {
     background: linear-gradient(to left, transparent, rgba(0,245,255,0.4));
 }
 
-/* ── Controls (Empezar / Plantarse) ────────────────── */
+
 .controls {
     display: flex;
     justify-content: center;
@@ -344,7 +338,7 @@ body::after {
     flex-wrap: wrap;
 }
 
-/* ── Base button style for non-answer buttons ──────── */
+
 button {
     font-family: 'Rajdhani', sans-serif;
     font-weight: 700;
@@ -359,7 +353,7 @@ button {
     clip-path: polygon(0 0, calc(100% - 8px) 0, 100% 8px, 100% 100%, 8px 100%, 0 calc(100% - 8px));
 }
 
-/* START / PLANTARSE buttons */
+
 .controls button:first-child,
 #btnEmpezar {
     background: linear-gradient(135deg, rgba(0,245,255,0.2), rgba(0,245,255,0.05));
@@ -398,7 +392,7 @@ button {
     box-shadow: 0 0 30px rgba(255,42,109,0.5);
 }
 
-/* ── Lifelines (Comodines) panel ───────────────────── */
+
 .lifelines,
 .potenciadores {
     display: flex;
@@ -424,7 +418,7 @@ button {
     transform: translateY(-2px);
 }
 
-/* ── Potenciadores panel ───────────────────────────── */
+
 .potenciadores button {
     background: rgba(20, 0, 40, 0.7);
     color: var(--purple);
@@ -440,7 +434,7 @@ button {
     transform: translateY(-2px);
 }
 
-/* ── Shield icon ───────────────────────────────────── */
+
 #escudoIcono {
     position: fixed;
     top: 80px;
@@ -457,7 +451,7 @@ button {
     50%     { transform: translateY(-6px); }
 }
 
-/* ── Timer warning animation ───────────────────────── */
+
 .timer-warning .stat-value.timer-val {
     color: var(--magenta) !important;
     text-shadow: var(--glow-m) !important;
@@ -469,9 +463,6 @@ button {
     50%     { opacity: 0.4; }
 }
 
-/* ══════════════════════════════════════════════════════
-   LEVEL SCREEN  (Fin de tramo)
-   ══════════════════════════════════════════════════════ */
 #levelScreen {
     position: fixed;
     inset: 0;
@@ -540,7 +531,7 @@ button {
     transform: translateY(-2px);
 }
 
-/* Continue = cyan accent, Plantar = magenta */
+
 #levelScreen .btn-continue {
     background: rgba(0,245,255,0.1) !important;
     border-color: var(--cyan) !important;
@@ -558,7 +549,7 @@ button {
     padding: 14px 40px !important;
 }
 
-/* ── Comprar comodines ─────────────────────────────── */
+
 #comprarComodines {
     display: flex;
     flex-wrap: wrap;
@@ -582,7 +573,7 @@ button {
     box-shadow: 0 0 12px rgba(245,230,66,0.3);
 }
 
-/* ── Ruleta canvas ─────────────────────────────────── */
+
 #ruletaContainer {
     display: flex;
     flex-direction: column;
@@ -606,7 +597,7 @@ button {
     min-height: 28px;
 }
 
-/* ── Span counts in lifeline buttons ───────────────── */
+
 .lifelines button span,
 .potenciadores button span {
     font-family: 'Orbitron', sans-serif;
@@ -614,7 +605,7 @@ button {
     color: var(--yellow);
 }
 
-/* ── Scrollbar ─────────────────────────────────────── */
+
 ::-webkit-scrollbar { width: 6px; }
 ::-webkit-scrollbar-track { background: rgba(0,0,0,0.3); }
 ::-webkit-scrollbar-thumb {
@@ -623,7 +614,7 @@ button {
 }
 ::-webkit-scrollbar-thumb:hover { background: rgba(0,245,255,0.6); }
 
-/* ── Responsive ────────────────────────────────────── */
+
 @media (max-width: 520px) {
     #respuestas { grid-template-columns: 1fr; }
     .stats { flex-wrap: wrap; gap: 12px; }
