@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>INVERSIÓN ARRIESGADA // SYS-7</title>
+    <link rel="stylesheet" href="pruebaconcurso.css">
+</head>
+<body>
+
+<!-- HUD corners -->
+<div class="hud-corner tl"></div>
+<div class="hud-corner tr"></div>
+<div class="hud-corner bl"></div>
+<div class="hud-corner br"></div>
+
+<!-- Floating shield -->
+<div id="escudoIcono" style="visibility:hidden;">🛡️</div>
+
+<!-- ══════════════════════════════════════════════
+     HEADER
+═══════════════════════════════════════════════ -->
+<header class="page-header">
+    <h1>INVERSIÓN ARRIESGADA</h1>
+    <p class="subtitle" id="bootText">// SISTEMA DE EVALUACIÓN DE RIESGO v7.3.1</p>
+</header>
+
+<!-- ══════════════════════════════════════════════
+     MAIN GAME
+═══════════════════════════════════════════════ -->
+<div class="juego">
+
+    <!-- Stats bar -->
+    <div class="stats hud-panel">
+        <div class="stat-item">
+            <span class="stat-label">▲ CAPITAL</span>
+            <span class="stat-value money-val"><span id="money">0</span> €</span>
+        </div>
+        <div class="stat-divider"></div>
+        <div class="stat-item">
+            <span class="stat-label">♥ VIDAS</span>
+            <span class="stat-value lives-val" id="lives">3</span>
+        </div>
+        <div class="stat-divider"></div>
+        <div class="stat-item">
+            <span class="stat-label">⏱ TIEMPO</span>
+            <span class="stat-value timer-val" id="timer">30</span>
+        </div>
+    </div>
+
+    <!-- Question box -->
+    <div class="questionBox hud-panel">
+        <p class="question-header">// INTERROGATORIO — NIVEL <span id="levelLabel">—</span></p>
+        <h2 id="question">Inicializando sistema de preguntas...</h2>
+        <div id="respuestas"></div>
+    </div>
+
+    <!-- Controls -->
+    <div class="controls">
+        <button id="btnEmpezar" onclick="comenzar()">▶ INICIAR PROTOCOLO</button>
+        <button id="btnPlantar" class="oculto" onclick="plantar()">⏹ PLANTARSE</button>
+    </div>
+
+    <!-- ── Comodines ── -->
+    <p class="section-title">COMODINES DE AYUDA</p>
+    <div class="lifelines hud-panel" style="display:none;">
+        <button id="btnFiftyFifty" onclick="fiftyFifty()">
+            ◈ 50:50 <span class="count-badge">(<span id="countFiftyFifty">1</span>)</span>
+        </button>
+        <button id="btnComodinesInfinitos" onclick="comodinesInfinitos()">
+            ♾️ COMODINES INFINITOS <span class="count-badge">(<span id="countCambiarPregunta">1</span>)</span>
+        </button>
+        <button id="btnTiempoExtra" onclick="tiempoExtra()">
+            ⊕ TIEMPO EXTRA <span class="count-badge">(<span id="countTiempoExtra">1</span>)</span>
+        </button>
+        <button id="btnDobleOportunidad" onclick="dobleOportunidad()">
+            ⬡ DOBLE OPORTUNIDAD <span class="count-badge">(<span id="countDobleOportunidad">1</span>)</span>
+        </button>
+    </div>
+
+    <!-- ── Potenciadores ── -->
+    <p class="section-title">POTENCIADORES <span class="section-hint">(activa ANTES de ver la pregunta)</span></p>
+    <div class="potenciadores hud-panel" style="display:none;">
+        <button onclick="respuestasExtra()">◉ AÑADIR RESPUESTAS</button>
+        <button onclick="doblePuntos()">✦ DOBLE PUNTUACIÓN</button>
+        <button onclick="girarRuleta()">⟳ MODO RULETA</button>
+    </div>
+
+</div><!-- /juego -->
+
+
+<!-- ══════════════════════════════════════════════
+     LEVEL SCREEN
+═══════════════════════════════════════════════ -->
+<div id="levelScreen" style="display:none;">
+
+    <div class="ls-header">
+        <p class="ls-tag">// FIN DE TRAMO</p>
+        <h2 class="ls-title">TRAMO COMPLETADO</h2>
+        <div class="ls-level-badge">
+            <span class="ls-badge-label">NIVEL SUPERADO</span>
+            <span id="levelCompletedName" class="ls-badge-value">—</span>
+        </div>
+    </div>
+
+    <!-- Capital + progress -->
+    <div class="ls-capital-block hud-panel">
+        <span class="ls-cap-label">CAPITAL ACUMULADO</span>
+        <span class="ls-cap-value" id="levelMoney">0 €</span>
+        <div class="ls-progress-track">
+            <div class="ls-progress-bar" id="levelProgressBar" style="width:0%"></div>
+        </div>
+        <p class="ls-cap-sub">Preguntas completadas en este tramo</p>
+    </div>
+
+    <!-- Next level -->
+    <div class="ls-next-block">
+        <span class="ls-next-label">PRÓXIMO NIVEL →</span>
+        <span id="nextLevelName" class="ls-next-value">—</span>
+    </div>
+
+    <!-- Decision buttons -->
+    <div class="ls-actions">
+        <button id="btnContinueLevel" class="btn-continue" onclick="continueGame()">▶ CONTINUAR AL SIGUIENTE NIVEL</button>
+        <button class="btn-plantar" onclick="plantar()">⏹ PLANTARSE Y COBRAR</button>
+    </div>
+
+    <!-- Potenciadores para el próximo tramo -->
+    <p class="ls-section-title">POTENCIADORES — PRÓXIMO TRAMO</p>
+    <div class="ls-boosters">
+        <button onclick="respuestasExtra()">◉ RESP. EXTRA</button>
+        <button onclick="doblePuntos()">✦ DOBLE PUNTOS</button>
+        <button onclick="girarRuleta()">⟳ RULETA</button>
+    </div>
+
+    <!-- Buy lifelines -->
+    <p class="ls-section-title">ADQUIRIR COMODINES — <span id="comodinCostLabel">75 €</span> / uso</p>
+    <div id="comprarComodines" class="ls-buy-grid"></div>
+
+    <!-- Ruleta -->
+    <p class="ls-section-title">RULETA DE FORTUNA</p>
+    <div id="ruletaContainer">
+        <canvas id="ruleta" width="280" height="280"></canvas>
+        <button class="btn-spin" onclick="spinRuleta()">⟳ GIRAR RULETA</button>
+    </div>
+    <p id="ruletaResultado"></p>
+
+</div><!-- /levelScreen -->
+
+
+<!-- ══════════════════════════════════════════════
+     GAME OVER SCREEN
+═══════════════════════════════════════════════ -->
+<div id="gameOverScreen" style="display:none;">
+
+    <div class="go-skull-wrap">
+        <svg class="go-skull" viewBox="0 0 200 220" xmlns="http://www.w3.org/2000/svg">
+            <!-- Head -->
+            <ellipse cx="100" cy="90" rx="72" ry="75" fill="#1a0020" stroke="#ff2a6d" stroke-width="2.5"/>
+            <!-- Forehead shine -->
+            <ellipse cx="80" cy="60" rx="22" ry="14" fill="rgba(255,42,109,0.08)" transform="rotate(-15,80,60)"/>
+            <!-- Eye sockets -->
+            <ellipse cx="72"  cy="95" rx="22" ry="26" fill="#0a0010"/>
+            <ellipse cx="128" cy="95" rx="22" ry="26" fill="#0a0010"/>
+            <!-- Eye glow -->
+            <ellipse cx="72"  cy="95" rx="13" ry="16" fill="#ff2a6d" opacity="0.7"/>
+            <ellipse cx="128" cy="95" rx="13" ry="16" fill="#ff2a6d" opacity="0.7"/>
+            <ellipse cx="72"  cy="95" rx="6"  ry="7"  fill="#ff8080"/>
+            <ellipse cx="128" cy="95" rx="6"  ry="7"  fill="#ff8080"/>
+            <!-- Nose hole -->
+            <path d="M93 122 Q100 130 107 122 Q107 135 100 138 Q93 135 93 122Z" fill="#0a0010"/>
+            <!-- Teeth base -->
+            <rect x="55" y="148" width="90" height="18" rx="4" fill="#1a0020" stroke="#ff2a6d" stroke-width="1.5"/>
+            <!-- Individual teeth -->
+            <rect x="60"  y="150" width="12" height="14" rx="2" fill="#f0e0e0"/>
+            <rect x="75"  y="150" width="12" height="16" rx="2" fill="#f0e0e0"/>
+            <rect x="90"  y="150" width="12" height="16" rx="2" fill="#f0e0e0"/>
+            <rect x="105" y="150" width="12" height="16" rx="2" fill="#f0e0e0"/>
+            <rect x="120" y="150" width="12" height="14" rx="2" fill="#f0e0e0"/>
+            <!-- Jaw -->
+            <path d="M55 155 Q55 178 100 180 Q145 178 145 155" fill="#1a0020" stroke="#ff2a6d" stroke-width="2"/>
+            <!-- Cracks -->
+            <path d="M100 20 L97 55 L103 80" stroke="#ff2a6d" stroke-width="1.5" fill="none" opacity="0.6"/>
+            <path d="M55 65 L75 80" stroke="#ff2a6d" stroke-width="1" fill="none" opacity="0.5"/>
+            <!-- Glitch lines -->
+            <rect x="30" y="85"  width="40" height="2" fill="#ff2a6d" opacity="0.3" class="glitch-line"/>
+            <rect x="130" y="110" width="35" height="2" fill="#ff2a6d" opacity="0.3" class="glitch-line"/>
+        </svg>
+    </div>
+
+    <h2 class="go-title">PROTOCOLO TERMINADO</h2>
+    <p class="go-subtitle">// TODOS LOS CRÉDITOS PERDIDOS</p>
+
+    <div class="go-money-block">
+        <span class="go-money-label">CAPITAL PERDIDO</span>
+        <span class="go-money-value" id="gameOverMoney">0 €</span>
+    </div>
+
+    <div class="go-actions">
+        <button class="btn-retry" onclick="retryGame()">⟳ REINTENTAR PROTOCOLO</button>
+    </div>
+
+    <div class="go-scanline-text">SYSTEM_FAILURE // ERR_CODE: 0xDEAD</div>
+
+</div><!-- /gameOverScreen -->
+
+
+<!-- ══════════════════════════════════════════════
+     PLANTAR / RETIRE SCREEN
+═══════════════════════════════════════════════ -->
+<div id="plantarScreen" style="display:none;">
+    <div class="ps-icon">💼</div>
+    <h2 class="ps-title">CAPITAL ASEGURADO</h2>
+    <p class="ps-sub">// PROTOCOLO DETENIDO POR DECISIÓN DEL OPERADOR</p>
+    <div class="ps-money-block">
+        <span class="ps-money-label">CAPITAL OBTENIDO</span>
+        <span class="ps-money-value" id="plantarMoney">0 €</span>
+    </div>
+    <button class="btn-continue" onclick="retryGame()">⟳ NUEVA PARTIDA</button>
+</div>
+
+
+<!-- ══════════════════════════════════════════════
+     VICTORY SCREEN
+═══════════════════════════════════════════════ -->
+<div id="victoryScreen" style="display:none;">
+    <div class="vc-trophy">🏆</div>
+    <h2 class="vc-title">VICTORIA TOTAL</h2>
+    <p class="vc-sub">// TODOS LOS PROTOCOLOS SUPERADOS</p>
+    <div class="vc-money-block">
+        <span class="vc-money-label">CAPITAL FINAL</span>
+        <span class="vc-money-value" id="victoryMoney">0 €</span>
+    </div>
+    <button class="btn-continue" onclick="retryGame()">⟳ JUGAR DE NUEVO</button>
+</div>
+
+
+<!-- ══════════════════════════════════════════════
+     SCRIPTS
+═══════════════════════════════════════════════ -->
+<script src="pruebaconcurso.js"></script>
+<script>
+    /* ── Boot typewriter ────────────────────────── */
+    const msgs = [
+        "// SISTEMA DE EVALUACIÓN DE RIESGO v7.3.1",
+        "// CONEXIÓN SEGURA ESTABLECIDA...",
+        "// CARGANDO BASE DE DATOS DE PREGUNTAS...",
+        "// PROTOCOLO DE INVERSIÓN ACTIVO"
+    ]
+    let mi=0, ci=0
+    const bootEl=document.getElementById("bootText")
+    function typeNext(){
+        if(ci<msgs[mi].length){ bootEl.textContent=msgs[mi].slice(0,++ci); setTimeout(typeNext,45) }
+        else{ setTimeout(()=>{ mi=(mi+1)%msgs.length; ci=0; typeNext() },2600) }
+    }
+    typeNext()
+
+    /* ── A/B/C/D labels via MutationObserver ─────── */
+    const labels=["A","B","C","D","E","F"]
+    new MutationObserver(()=>{
+        document.querySelectorAll("#respuestas button").forEach((b,i)=>b.setAttribute("data-letter",labels[i]||"?"))
+    }).observe(document.getElementById("respuestas"),{childList:true})
+
+    /* ── Timer warning ────────────────────────────── */
+    const timerEl=document.getElementById("timer")
+    const statsEl=document.querySelector(".stats")
+    new MutationObserver(()=>{
+        parseInt(timerEl.textContent)<=8
+            ? statsEl.classList.add("timer-warning")
+            : statsEl.classList.remove("timer-warning")
+    }).observe(timerEl,{childList:true,characterData:true,subtree:true})
+</script>
+</body>
+</html>
