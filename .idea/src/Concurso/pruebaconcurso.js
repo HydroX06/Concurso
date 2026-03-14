@@ -12,6 +12,8 @@ let shieldActive = false
 
 let doublePointsActive  = false
 let ruletaActiva        = false
+let extraAnswersActive  = false
+let modoPruebaComodines = false
 
 let levelOrder = ["muyFacil","easy","medio","dificil","muyDificil"]
 let currentLevelIndex    = 0
@@ -165,6 +167,8 @@ function comenzar(){
     money = 0; lives = 3
     preguntasJugadas = []
     usosComodines = { fiftyFifty:1, cambiarPregunta:1, tiempoExtra:1, dobleOportunidad:1 }
+    extraAnswersActive  = false
+    modoPruebaComodines = false
 
     refreshComodinCounts()
     updateStats()
@@ -285,6 +289,7 @@ function showLevelScreen(){
 
     buildBuyPanel()
     drawRuleta(spinAngle)
+    if(ruletaActiva){ setTimeout(spinRuleta, 600) }
 }
 
 function buildBuyPanel(){
@@ -331,6 +336,7 @@ function continueGame(){
     currentQuestionIndex = 0
     preguntasJugadas = []
     usosComodines = { fiftyFifty:1, cambiarPregunta:1, tiempoExtra:1, dobleOportunidad:1 }
+    modoPruebaComodines = false
     refreshComodinCounts()
 
     if(currentLevelIndex >= levelOrder.length){ showVictoryScreen(); return }
@@ -388,7 +394,7 @@ function fiftyFifty(){
             }
         }
     } else {
-        alert("Ya no puedes usar este comodín en este tramo.")
+        showToast("⚠ Sin usos disponibles para este comodín", "error")
     }
 }
 
@@ -397,16 +403,20 @@ function comodinesInfinitos(){
     let coste = 300  // precio del potenciador
 
     if(money < coste){
-        alert("No tienes suficiente dinero")
+        showToast("⚠ CAPITAL INSUFICIENTE", "error")
         return
     }
 
     money -= coste
     modoPruebaComodines = true
 
+    document.getElementById("countFiftyFifty").innerText      = "∞"
+    document.getElementById("countTiempoExtra").innerText      = "∞"
+    document.getElementById("countDobleOportunidad").innerText = "∞"
+
     updateStats()
 
-    alert("Comodines infinitos activado: puedes usar comodines sin gastar usos en esta pregunta")
+    showToast("♾️ Comodines infinitos activados", "success")
 }
 
 function tiempoExtra(){
@@ -420,7 +430,7 @@ function tiempoExtra(){
         extraTime()
 
     } else {
-        alert("Ya no puedes usar este comodín en este tramo")
+        showToast("⚠ Sin usos disponibles para este comodín", "error")
     }
 }
 
@@ -435,10 +445,11 @@ function dobleOportunidad(){
         escudo()
 
     } else {
-        alert("Ya no puedes usar este comodín en este tramo.")
+        showToast("⚠ Sin usos disponibles para este comodín", "error")
     }
 }
 
+function respuestasExtra()  { extraAnswersActive  = true; showToast("◉ Respuestas extra activadas", "info") }
 function doblePuntos()     { doublePointsActive = true; showToast("✦ Doble puntos activados",    "info") }
 
 /* ═══════════════ POTENCIADORES ════════════════════════ */
@@ -446,8 +457,10 @@ function doblePuntos()     { doublePointsActive = true; showToast("✦ Doble pun
 function girarRuleta()     { ruletaActiva = true;       showToast("⟳ Modo ruleta — úsalo en fin de tramo", "info") }
 
 function resetBoosters(){
-    doublePointsActive = false
-    ruletaActiva       = false
+    doublePointsActive  = false
+    ruletaActiva        = false
+    modoPruebaComodines = false
+    extraAnswersActive  = false
 }
 
 function cambiarPregunta(){
@@ -468,23 +481,20 @@ function cambiarPregunta(){
         }
 
         if (disponibles.length === 0) {
-            alert("No hay más preguntas en este tramo.")
+            showToast("⚠ No hay más preguntas en este tramo", "error")
             return
         }
 
-        usosComodines.cambiarPregunta--
-        document.getElementById("countCambiarPregunta").innerText = usosComodines.cambiarPregunta
-
         let elegida = disponibles[Math.floor(Math.random() * disponibles.length)]
-        preguntasJugadas.push(elegida.i)
-        currentQuestion = elegida.q
+        preguntasJugadas.push(questions[levelOrder[currentLevelIndex]].indexOf(elegida))
+        currentQuestion = elegida
 
         clearInterval(interval)
         showQuestion()
         startTimer()
 
     } else {
-        alert("Ya no puedes usar este comodín en este tramo.")
+        showToast("⚠ Sin usos disponibles para este comodín", "error")
     }
 }
 
@@ -578,4 +588,36 @@ function spinRuleta(){
     requestAnimationFrame(frame)
 }
 
-window.addEventListener("load", ()=>{ drawRuleta(0) })
+window.addEventListener("load", ()=>{
+    drawRuleta(0)
+
+    /* ── Boot typewriter ────────────────────────── */
+    const msgs = [
+        "// SISTEMA DE EVALUACIÓN DE RIESGO v7.3.1",
+        "// CONEXIÓN SEGURA ESTABLECIDA...",
+        "// CARGANDO BASE DE DATOS DE PREGUNTAS...",
+        "// PROTOCOLO DE INVERSIÓN ACTIVO"
+    ]
+    let mi=0, ci=0
+    const bootEl=document.getElementById("bootText")
+    function typeNext(){
+        if(ci<msgs[mi].length){ bootEl.textContent=msgs[mi].slice(0,++ci); setTimeout(typeNext,45) }
+        else{ setTimeout(()=>{ mi=(mi+1)%msgs.length; ci=0; typeNext() },2600) }
+    }
+    typeNext()
+
+    /* ── A/B/C/D labels via MutationObserver ─────── */
+    const labels=["A","B","C","D","E","F"]
+    new MutationObserver(()=>{
+        document.querySelectorAll("#respuestas button").forEach((b,i)=>b.setAttribute("data-letter",labels[i]||"?"))
+    }).observe(document.getElementById("respuestas"),{childList:true})
+
+    /* ── Timer warning ────────────────────────────── */
+    const timerEl=document.getElementById("timer")
+    const statsEl=document.querySelector(".stats")
+    new MutationObserver(()=>{
+        parseInt(timerEl.textContent)<=8
+            ? statsEl.classList.add("timer-warning")
+            : statsEl.classList.remove("timer-warning")
+    }).observe(timerEl,{childList:true,characterData:true,subtree:true})
+})

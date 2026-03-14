@@ -239,36 +239,6 @@
      SCRIPTS
 ═══════════════════════════════════════════════ -->
 <script src="pruebaconcurso.js"></script>
-<script>
-    /* ── Boot typewriter ────────────────────────── */
-    const msgs = [
-        "// SISTEMA DE EVALUACIÓN DE RIESGO v7.3.1",
-        "// CONEXIÓN SEGURA ESTABLECIDA...",
-        "// CARGANDO BASE DE DATOS DE PREGUNTAS...",
-        "// PROTOCOLO DE INVERSIÓN ACTIVO"
-    ]
-    let mi=0, ci=0
-    const bootEl=document.getElementById("bootText")
-    function typeNext(){
-        if(ci<msgs[mi].length){ bootEl.textContent=msgs[mi].slice(0,++ci); setTimeout(typeNext,45) }
-        else{ setTimeout(()=>{ mi=(mi+1)%msgs.length; ci=0; typeNext() },2600) }
-    }
-    typeNext()
 
-    /* ── A/B/C/D labels via MutationObserver ─────── */
-    const labels=["A","B","C","D","E","F"]
-    new MutationObserver(()=>{
-        document.querySelectorAll("#respuestas button").forEach((b,i)=>b.setAttribute("data-letter",labels[i]||"?"))
-    }).observe(document.getElementById("respuestas"),{childList:true})
-
-    /* ── Timer warning ────────────────────────────── */
-    const timerEl=document.getElementById("timer")
-    const statsEl=document.querySelector(".stats")
-    new MutationObserver(()=>{
-        parseInt(timerEl.textContent)<=8
-            ? statsEl.classList.add("timer-warning")
-            : statsEl.classList.remove("timer-warning")
-    }).observe(timerEl,{childList:true,characterData:true,subtree:true})
-</script>
 </body>
 </html>
