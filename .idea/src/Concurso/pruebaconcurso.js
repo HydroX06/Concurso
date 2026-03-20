@@ -20,7 +20,6 @@ let currentLevelIndex    = 0
 let currentQuestionIndex = 0
 let preguntasJugadas     = []
 
-/* Coste progresivo de comodines por nivel (índice 0→4) */
 const comodinCostes = [75, 150, 250, 400, 600]
 
 const levelNames = {
@@ -111,6 +110,15 @@ let usosComodines = {
 }
 
 /* ═══════════════ HELPERS ══════════════════════════ */
+function mezclarArray(array){
+    for(let i = array.length - 1; i > 0; i--){
+        let j = Math.floor(Math.random() * (i + 1))
+        let temp = array[i]
+        array[i] = array[j]
+        array[j] = temp
+    }
+}
+
 function updateLevelLabel(){
     const lvl = levelOrder[currentLevelIndex] || ""
     const el  = document.getElementById("levelLabel")
@@ -132,7 +140,6 @@ function refreshComodinCounts(){
     document.getElementById("countDobleOportunidad").innerText  = usosComodines.dobleOportunidad
 }
 
-/* Toast notification – replaces all alerts */
 function showToast(msg, type="info"){
     const t = document.createElement("div")
     t.className = "game-toast toast-" + type
@@ -169,6 +176,8 @@ function comenzar(){
     usosComodines = { fiftyFifty:1, cambiarPregunta:1, tiempoExtra:1, dobleOportunidad:1 }
     extraAnswersActive  = false
     modoPruebaComodines = false
+
+    mezclarArray(questions[levelOrder[0]])
 
     refreshComodinCounts()
     updateStats()
@@ -270,12 +279,10 @@ function showLevelScreen(){
     document.getElementById("levelCompletedName").style.color = levelColors[completedLvl] || "var(--cyan)"
     document.getElementById("levelMoney").innerText = money + " €"
 
-    // Progress bar
     const total = questions[completedLvl]?.length || 1
     const pct = Math.round((currentQuestionIndex / total) * 100)
     document.getElementById("levelProgressBar").style.width = Math.min(pct,100) + "%"
 
-    // Next level badge
     const nextIdx = currentLevelIndex + 1
     if(nextIdx < levelOrder.length){
         const nextLvl = levelOrder[nextIdx]
@@ -340,7 +347,10 @@ function continueGame(){
     refreshComodinCounts()
 
     if(currentLevelIndex >= levelOrder.length){ showVictoryScreen(); return }
-    updateLevelLabel(); nextQuestion()
+
+    mezclarArray(questions[levelOrder[currentLevelIndex]])
+    updateLevelLabel()
+    nextQuestion()
 }
 
 /* ═══════════════ PLANTAR ══════════════════════════ */
@@ -377,17 +387,14 @@ function escudo(){
 
 function fiftyFifty(){
     if(usosComodines.fiftyFifty > 0 || modoPruebaComodines){
-
         if(!modoPruebaComodines){
             usosComodines.fiftyFifty--
             document.getElementById("countFiftyFifty").innerText = usosComodines.fiftyFifty
         }
-
         let buttons = document.querySelectorAll("#respuestas button")
         let eliminadas = 0
-
         for(let i = 0; i < buttons.length; i++){
-            if(i !== currentQuestion.correct && eliminadas < 2) {
+            if(i !== currentQuestion.correct && eliminadas < 2){
                 buttons[i].disabled = true
                 buttons[i].style.opacity = "0.3"
                 eliminadas++
@@ -399,36 +406,27 @@ function fiftyFifty(){
 }
 
 function comodinesInfinitos(){
-
-    let coste = 300  // precio del potenciador
-
+    let coste = 300
     if(money < coste){
         showToast("⚠ CAPITAL INSUFICIENTE", "error")
         return
     }
-
     money -= coste
     modoPruebaComodines = true
-
     document.getElementById("countFiftyFifty").innerText      = "∞"
     document.getElementById("countTiempoExtra").innerText      = "∞"
     document.getElementById("countDobleOportunidad").innerText = "∞"
-
     updateStats()
-
     showToast("♾️ Comodines infinitos activados", "success")
 }
 
 function tiempoExtra(){
     if(usosComodines.tiempoExtra > 0 || modoPruebaComodines){
-
         if(!modoPruebaComodines){
             usosComodines.tiempoExtra--
             document.getElementById("countTiempoExtra").innerText = usosComodines.tiempoExtra
         }
-
         extraTime()
-
     } else {
         showToast("⚠ Sin usos disponibles para este comodín", "error")
     }
@@ -436,25 +434,19 @@ function tiempoExtra(){
 
 function dobleOportunidad(){
     if(usosComodines.dobleOportunidad > 0 || modoPruebaComodines){
-
         if(!modoPruebaComodines){
             usosComodines.dobleOportunidad--
             document.getElementById("countDobleOportunidad").innerText = usosComodines.dobleOportunidad
         }
-
         escudo()
-
     } else {
         showToast("⚠ Sin usos disponibles para este comodín", "error")
     }
 }
 
 function respuestasExtra()  { extraAnswersActive  = true; showToast("◉ Respuestas extra activadas", "info") }
-function doblePuntos()     { doublePointsActive = true; showToast("✦ Doble puntos activados",    "info") }
-
-/* ═══════════════ POTENCIADORES ════════════════════════ */
-
-function girarRuleta()     { ruletaActiva = true;       showToast("⟳ Modo ruleta — úsalo en fin de tramo", "info") }
+function doblePuntos()      { doublePointsActive  = true; showToast("✦ Doble puntos activados", "info") }
+function girarRuleta()      { ruletaActiva        = true; showToast("⟳ Modo ruleta — úsalo en fin de tramo", "info") }
 
 function resetBoosters(){
     doublePointsActive  = false
@@ -464,8 +456,7 @@ function resetBoosters(){
 }
 
 function cambiarPregunta(){
-    if (usosComodines.cambiarPregunta > 0 || modoPruebaComodines) {
-
+    if(usosComodines.cambiarPregunta > 0 || modoPruebaComodines){
         if(!modoPruebaComodines){
             usosComodines.cambiarPregunta--
             document.getElementById("countCambiarPregunta").innerText = usosComodines.cambiarPregunta
@@ -475,12 +466,12 @@ function cambiarPregunta(){
         let disponibles = []
 
         for(let i = 0; i < qList.length; i++){
-            if(!preguntasJugadas.includes(i))   {
+            if(!preguntasJugadas.includes(i)){
                 disponibles.push(qList[i])
             }
         }
 
-        if (disponibles.length === 0) {
+        if(disponibles.length === 0){
             showToast("⚠ No hay más preguntas en este tramo", "error")
             return
         }
@@ -537,14 +528,12 @@ function drawRuleta(angle){
         ctx.fillText(s.texto, r-10, 4); ctx.restore()
     })
 
-    // Hub
     ctx.beginPath(); ctx.arc(cx,cy,16,0,2*Math.PI)
     const g=ctx.createRadialGradient(cx,cy,2,cx,cy,16)
     g.addColorStop(0,"#00f5ff"); g.addColorStop(1,"#003344")
     ctx.fillStyle=g; ctx.fill()
     ctx.strokeStyle="#00f5ff"; ctx.lineWidth=2; ctx.shadowColor="#00f5ff"; ctx.shadowBlur=10; ctx.stroke()
 
-    // Pointer
     ctx.beginPath()
     ctx.moveTo(cx-8, cy-r-10)
     ctx.lineTo(cx+8, cy-r-10)
@@ -591,7 +580,6 @@ function spinRuleta(){
 window.addEventListener("load", ()=>{
     drawRuleta(0)
 
-    /* ── Boot typewriter ────────────────────────── */
     const msgs = [
         "// SISTEMA DE EVALUACIÓN DE RIESGO v7.3.1",
         "// CONEXIÓN SEGURA ESTABLECIDA...",
@@ -606,13 +594,11 @@ window.addEventListener("load", ()=>{
     }
     typeNext()
 
-    /* ── A/B/C/D labels via MutationObserver ─────── */
     const labels=["A","B","C","D","E","F"]
     new MutationObserver(()=>{
         document.querySelectorAll("#respuestas button").forEach((b,i)=>b.setAttribute("data-letter",labels[i]||"?"))
     }).observe(document.getElementById("respuestas"),{childList:true})
 
-    /* ── Timer warning ────────────────────────────── */
     const timerEl=document.getElementById("timer")
     const statsEl=document.querySelector(".stats")
     new MutationObserver(()=>{
