@@ -19,7 +19,6 @@ let levelOrder = ["muyFacil","easy","medio","dificil","muyDificil"]
 let currentLevelIndex    = 0
 let currentQuestionIndex = 0
 let preguntasJugadas     = []
-let currentLevelQuestions = []
 
 const comodinCostes = [75, 150, 250, 400, 600]
 
@@ -111,12 +110,6 @@ let usosComodines = {
 }
 
 /* ═══════════════ HELPERS ══════════════════════════ */
-function prepararNivel(levelKey){
-    let copia = [...questions[levelKey]]
-    mezclarArray(copia)
-    currentLevelQuestions = copia.slice(0, 4)
-}
-
 function mezclarArray(array){
     for(let i = array.length - 1; i > 0; i--){
         let j = Math.floor(Math.random() * (i + 1))
@@ -184,7 +177,7 @@ function comenzar(){
     extraAnswersActive  = false
     modoPruebaComodines = false
 
-    prepararNivel(levelOrder[0])
+    mezclarArray(questions[levelOrder[0]])
 
     refreshComodinCounts()
     updateStats()
@@ -193,8 +186,9 @@ function comenzar(){
 }
 
 function nextQuestion(){
-    const qList = currentLevelQuestions
-    if(!qList || qList.length === 0){ gameOver(); return }
+    const level = levelOrder[currentLevelIndex]
+    const qList = questions[level]
+    if(!qList){ gameOver(); return }
 
     if(currentQuestionIndex >= qList.length){
         clearInterval(interval)
@@ -249,12 +243,7 @@ function answer(index){
                 shieldActive = false
                 document.getElementById("escudoIcono").style.visibility = "hidden"
             } else {
-                if(doublePointsActive){
-                    lives -= 2
-                    showToast("✗ INCORRECTO — Doble penalización: -2 vidas", "error")
-                } else {
-                    lives--
-                }
+                lives--
             }
             updateStats()
             if(lives <= 0){ clearInterval(interval); setTimeout(gameOver, 400); return }
@@ -359,8 +348,7 @@ function continueGame(){
 
     if(currentLevelIndex >= levelOrder.length){ showVictoryScreen(); return }
 
-    prepararNivel(levelOrder[currentLevelIndex])
-
+    mezclarArray(questions[levelOrder[currentLevelIndex]])
     updateLevelLabel()
     nextQuestion()
 }
@@ -473,7 +461,8 @@ function cambiarPregunta(){
             usosComodines.cambiarPregunta--
             document.getElementById("countCambiarPregunta").innerText = usosComodines.cambiarPregunta
         }
-        let qList = currentLevelQuestions
+        let level = levelOrder[currentLevelIndex]
+        let qList = questions[level]
         let disponibles = []
 
         for(let i = 0; i < qList.length; i++){
@@ -488,7 +477,7 @@ function cambiarPregunta(){
         }
 
         let elegida = disponibles[Math.floor(Math.random() * disponibles.length)]
-        preguntasJugadas.push(currentLevelQuestions.indexOf(elegida))
+        preguntasJugadas.push(questions[levelOrder[currentLevelIndex]].indexOf(elegida))
         currentQuestion = elegida
 
         clearInterval(interval)
@@ -613,7 +602,7 @@ window.addEventListener("load", ()=>{
     const timerEl=document.getElementById("timer")
     const statsEl=document.querySelector(".stats")
     new MutationObserver(()=>{
-        parseInt(timerEl.textContent,10)<=8
+        parseInt(timerEl.textContent)<=8
             ? statsEl.classList.add("timer-warning")
             : statsEl.classList.remove("timer-warning")
     }).observe(timerEl,{childList:true,characterData:true,subtree:true})
