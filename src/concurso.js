@@ -7,14 +7,14 @@
    Representa una pregunta con sus opciones y lógica
    ════════════════════════════════════════════════ */
 class Pregunta {
-    constructor(enunciado, opciones, correcta, premio){
+    constructor(enunciado, opciones, correctaa, premio){
         this.enunciado = enunciado
         this.opciones  = opciones
-        this.correcta  = correcta
+        this.correctaa  = correctaa
         this.premio    = premio
     }
 
-    esCorrecta(indice)     { return indice === this.correcta }
+    esCorrecta(indice)     { return indice === this.correctaa }
     getPremio(doble)       { return doble ? this.premio * 2 : this.premio }
     getPenalizacion(doble) { return doble ? 2 : 1 }
 }
@@ -28,7 +28,7 @@ class Nivel {
         this.clave     = clave
         this.nombre    = nombre
         this.color     = color
-        this.preguntas = preguntas.map(p => new Pregunta(p.enunciado, p.opciones, p.correcta, p.premio))
+        this.preguntas = preguntas.map(p => new Pregunta(p.enunciado, p.opciones, p.correctaa, p.premio))
     }
 
     prepararRonda(){
@@ -70,77 +70,77 @@ class Comodines {
    DATOS — Niveles y preguntas del concurso
    ════════════════════════════════════════════════ */
 const NIVELES = {
-    muyFacil: new Nivel("muyFacil","BÁSICO","#00f5ff",[
-        { enunciado:"¿Qué lenguaje se usa para hacer páginas web interactivas junto con HTML y CSS?", opciones:["JavaScript","C#","Pascal","Swift"], correcta:0, premio:100 },
-        { enunciado:"¿Qué etiqueta HTML se usa para crear un enlace?", opciones:["<img>","<link>","<a>","<href>"], correcta:2, premio:100 },
-        { enunciado:"¿Cuál es el océano más grande?", opciones:["Atlántico","Índico","Ártico","Pacífico"], correcta:3, premio:100 },
-        { enunciado:"¿Qué estrella está en el centro del sistema solar?", opciones:["La Luna","El Sol","Marte","Júpiter"], correcta:1, premio:100 },
-        { enunciado:"¿Cuántas patas tiene una araña?", opciones:["6","8","10","12"], correcta:1, premio:100 },
-        { enunciado:"En programación, ¿cómo se llama la 'caja' donde guardamos datos?", opciones:["Bucle","Variable","Clase","Función"], correcta:1, premio:100 },
-        { enunciado:"¿Quién escribió Don Quijote de la Mancha?", opciones:["Lope de Vega","Miguel de Cervantes","García Lorca","Fernando de Rojas"], correcta:1, premio:100 },
-        { enunciado:"¿Cuántos planetas hay en el sistema solar?", opciones:["7","8","9","10"], correcta:1, premio:100 },
-        { enunciado:"¿Quién pintó la Mona Lisa?", opciones:["Van Gogh","Picasso","Leonardo da Vinci","Miguel Ángel"], correcta:2, premio:100 },
-        { enunciado:"¿Qué científico formuló la ley de la gravedad?", opciones:["Einstein","Newton","Galileo","Tesla"], correcta:1, premio:100 },
-        { enunciado:"¿Qué idioma se habla principalmente en Brasil?", opciones:["Español","Portugués","Brasileño","Italiano"], correcta:1, premio:100 },
-        { enunciado:"¿Qué lenguaje se usa para estilos web?", opciones:["HTML","CSS","Python","C++"], correcta:1, premio:100 }
-    ]),
-    facil: new Nivel("facil","FÁCIL","#00ff9f",[
-        { enunciado:"En Python, ¿qué símbolo se usa para comentarios de una sola línea?", opciones:["//","--","#","**"], correcta:2, premio:200 },
-        { enunciado:"¿Qué metal es líquido a temperatura ambiente?", opciones:["Hierro","Mercurio","Oro","Cobre"], correcta:1, premio:200 },
-        { enunciado:"¿Cuál NO es un lenguaje de programación?", opciones:["HTML","Java","Python","PHP"], correcta:0, premio:200 },
-        { enunciado:"¿Qué significa HTML?", opciones:["HyperText Markup Language","HighText Machine Language","Hyper Transfer Mark","Home Tool Markup"], correcta:0, premio:200 },
-        { enunciado:"¿Cuál es el país más grande del mundo?", opciones:["Alemania","Estados Unidos","China","Rusia"], correcta:3, premio:200 },
-        { enunciado:"¿En qué continente se encuentra Egipto?", opciones:["Asia","Europa","África","América"], correcta:2, premio:200 },
-        { enunciado:"¿En qué ciudad se encuentra el Museo del Louvre?", opciones:["Londres","Roma","Berlín","París"], correcta:3, premio:200 },
-        { enunciado:"¿Qué órgano filtra la sangre en el cuerpo?", opciones:["Riñones","Pulmones","Estómago","Hígado"], correcta:0, premio:200 },
-        { enunciado:"¿Qué gas necesitan las plantas para la fotosíntesis?", opciones:["Oxígeno","Dióxido de carbono","Helio","Nitrógeno"], correcta:1, premio:200 },
-        { enunciado:"¿Qué palabra clave en Python define una función?", opciones:["function","def","func","define"], correcta:1, premio:200 },
-        { enunciado:"¿Cómo se llama una variable que no cambia su valor en JavaScript?", opciones:["let","const","var","static"], correcta:1, premio:200 },
-        { enunciado:"¿Qué es una clave primaria en una base de datos?", opciones:["La primera columna","Una contraseña","Un identificador único","Un índice"], correcta:2, premio:200 }
-    ]),
-    medio: new Nivel("medio","MEDIO","#f5e642",[
-        { enunciado:"¿Qué método añade un elemento a un array en JS?", opciones:["push()","add()","insert()","append()"], correcta:0, premio:300 },
-        { enunciado:"¿Qué país tiene más volcanes activos?", opciones:["Japón","Indonesia","Chile","Estados Unidos"], correcta:1, premio:300 },
-        { enunciado:"¿Qué tipo de base de datos es MongoDB?", opciones:["Relacional","NoSQL","Jerárquica","Orientada a objetos"], correcta:1, premio:300 },
-        { enunciado:"¿Qué método en Java se ejecuta al crear un objeto?", opciones:["main()","constructor()","init()","start()"], correcta:1, premio:300 },
-        { enunciado:"¿Qué operador compara igualdad estricta en JavaScript?", opciones:["==","===","!=","<>"], correcta:1, premio:300 },
-        { enunciado:"¿Qué palabra clave detiene un bucle?", opciones:["exit","stop","break","halt"], correcta:2, premio:300 },
-        { enunciado:"¿En qué año comenzó la Primera Guerra Mundial?", opciones:["1920","1910","1914","1933"], correcta:2, premio:300 },
-        { enunciado:"¿Quién fue el primer presidente del gobierno español tras Franco?", opciones:["Zapatero","Rajoy","Pedro Sánchez","Adolfo Suárez"], correcta:3, premio:300 },
-        { enunciado:"¿Cuál es el metal más abundante en la corteza terrestre?", opciones:["Hierro","Aluminio","Cobre","Plata"], correcta:1, premio:300 },
-        { enunciado:"¿Qué instrumento mide la velocidad del viento?", opciones:["Barómetro","Anemómetro","Termómetro","Voltímetro"], correcta:1, premio:300 },
-        { enunciado:"¿Qué significa SQL JOIN?", opciones:["Combinar filas de varias tablas","Eliminar tablas","Crear tablas","Ordenar tablas"], correcta:0, premio:300 },
-        { enunciado:"¿Cuál es el elemento más abundante en la corteza terrestre?", opciones:["Hierro","Nitrógeno","Silicio","Oxígeno"], correcta:3, premio:300 }
-    ]),
-    dificil: new Nivel("dificil","DIFÍCIL","#ff8c00",[
-        { enunciado:"¿Qué estructura almacena pares clave-valor?", opciones:["Array","Map","Stack","Queue"], correcta:1, premio:400 },
-        { enunciado:"¿Qué palabra clave en Java impide que una clase sea heredada?", opciones:["static","final","private","sealed"], correcta:1, premio:400 },
-        { enunciado:"¿Qué civilización construyó Machu Picchu?", opciones:["Azteca","Maya","Inca","Olmeca"], correcta:2, premio:400 },
-        { enunciado:"¿En qué año cayó el Imperio Romano de Occidente?", opciones:["476 d.C.","510 d.C.","73 d.C.","493 d.C."], correcta:0, premio:400 },
-        { enunciado:"¿Quién escribió 'Cien años de soledad'?", opciones:["Mario Vargas Llosa","Gabriel García Márquez","Pablo Neruda","Jorge Luis Borges"], correcta:1, premio:400 },
-        { enunciado:"¿Qué planeta tiene el día más largo del sistema solar?", opciones:["Mercurio","Venus","Marte","Júpiter"], correcta:1, premio:400 },
-        { enunciado:"¿Qué científico propuso las tres leyes del movimiento planetario?", opciones:["Galileo Galilei","Johannes Kepler","Isaac Newton","Tycho Brahe"], correcta:1, premio:400 },
-        { enunciado:"¿Qué país tiene más husos horarios?", opciones:["Estados Unidos","Rusia","China","Francia"], correcta:3, premio:400 },
-        { enunciado:"¿Qué lenguaje se usa para consultas en bases de datos relacionales?", opciones:["Python","SQL","HTML","CSS"], correcta:1, premio:400 },
-        { enunciado:"¿Cuál es la capital de Canadá?", opciones:["Toronto","Vancouver","Ottawa","Montreal"], correcta:2, premio:400 },
-        { enunciado:"¿Cuál es el río más largo de Europa?", opciones:["Danubio","Volga","Rin","Tajo"], correcta:1, premio:400 },
-        { enunciado:"¿Qué río atraviesa más países de África?", opciones:["Congo","Zambeze","Níger","Nilo"], correcta:3, premio:400 }
-    ]),
-    muyDificil: new Nivel("muyDificil","EXTREMO","#ff2a6d",[
-        { enunciado:"¿En qué país se originó el ajedrez?", opciones:["Persia","India","China","Grecia"], correcta:1, premio:500 },
-        { enunciado:"¿Qué matemático desarrolló la teoría de los logaritmos?", opciones:["Isaac Newton","John Napier","Carl Gauss","Leonhard Euler"], correcta:1, premio:500 },
-        { enunciado:"¿Qué tratado puso fin a la Primera Guerra Mundial?", opciones:["Tratado de Utrecht","Tratado de París","Tratado de Versalles","Tratado de Tordesillas"], correcta:2, premio:500 },
-        { enunciado:"¿Qué estructura de datos funciona con el principio LIFO?", opciones:["Queue","Stack","Tree","Graph"], correcta:1, premio:500 },
-        { enunciado:"¿Qué físico propuso el principio de incertidumbre?", opciones:["Albert Einstein","Niels Bohr","Werner Heisenberg","Max Planck"], correcta:2, premio:500 },
-        { enunciado:"¿Qué imperio fue gobernado por Mansa Musa?", opciones:["Imperio Songhai","Imperio de Malí","Imperio Otomano","Imperio Persa"], correcta:1, premio:500 },
-        { enunciado:"¿Qué constante física representa la velocidad de la luz en el vacío?", opciones:["g","c","h","k"], correcta:1, premio:500 },
-        { enunciado:"¿Qué científico descubrió la radiactividad natural en 1896?", opciones:["Marie Curie","Henri Becquerel","Ernest Rutherford","Niels Bohr"], correcta:1, premio:500 },
-        { enunciado:"¿Qué tipo de excepción en Java debe declararse o manejarse obligatoriamente?", opciones:["Checked Exception","Runtime Exception","Error","NullPointerException"], correcta:0, premio:500 },
-        { enunciado:"¿Qué elemento tiene el punto de fusión más alto de la Tabla Periódica?", opciones:["Titanio","Wolframio","Renio","Osmio"], correcta:1, premio:500 },
-        { enunciado:"¿En qué año fue publicada la 'Crítica de la Razón Pura' de Kant?", opciones:["1762","1790","1781","1820"], correcta:2, premio:500 },
-        { enunciado:"¿Qué filósofo presocrático sostenía que el Ápeiron era el principio de todo?", opciones:["Tales","Heráclito","Pitágoras","Anaximandro"], correcta:3, premio:500 }
-    ])
-}
+            muyFacil: new Nivel("muyFacil","BÁSICO","#00f5ff",[
+                { enunciado:"¿Qué lenguaje se usa para hacer páginas web interactivas junto con HTML y CSS?", opciones:["JavaScript","C#","Pascal","Swift"], correctaa:0, premio:100 },
+                { enunciado:"¿Qué etiqueta HTML se usa para crear un enlace?", opciones:["<img>","<link>","<a>","<href>"], correctaa:2, premio:100 },
+                { enunciado:"¿Cuál es el océano más grande?", opciones:["Atlántico","Índico","Ártico","Pacífico"], correctaa:3, premio:100 },
+                { enunciado:"¿Qué estrella está en el centro del sistema solar?", opciones:["La Luna","El Sol","Marte","Júpiter"], correctaa:1, premio:100 },
+                { enunciado:"¿Cuántas patas tiene una araña?", opciones:["6","8","10","12"], correctaa:1, premio:100 },
+                { enunciado:"En programación, ¿cómo se llama la 'caja' donde guardamos datos?", opciones:["Bucle","Variable","Clase","Función"], correctaa:1, premio:100 },
+                { enunciado:"¿Quién escribió Don Quijote de la Mancha?", opciones:["Lope de Vega","Miguel de Cervantes","García Lorca","Fernando de Rojas"], correctaa:1, premio:100 },
+                { enunciado:"¿Cuántos planetas hay en el sistema solar?", opciones:["7","8","9","10"], correctaa:1, premio:100 },
+                { enunciado:"¿Quién pintó la Mona Lisa?", opciones:["Van Gogh","Picasso","Leonardo da Vinci","Miguel Ángel"], correctaa:2, premio:100 },
+                { enunciado:"¿Qué científico formuló la ley de la gravedad?", opciones:["Einstein","Newton","Galileo","Tesla"], correctaa:1, premio:100 },
+                { enunciado:"¿Qué idioma se habla principalmente en Brasil?", opciones:["Español","Portugués","Brasileño","Italiano"], correctaa:1, premio:100 },
+                { enunciado:"¿Qué lenguaje se usa para estilos web?", opciones:["HTML","CSS","Python","C++"], correctaa:1, premio:100 }
+            ]),
+            facil: new Nivel("facil","FÁCIL","#00ff9f",[
+                { enunciado:"En Python, ¿qué símbolo se usa para comentarios de una sola línea?", opciones:["//","--","#","**"], correctaa:2, premio:200 },
+                { enunciado:"¿Qué metal es líquido a temperatura ambiente?", opciones:["Hierro","Mercurio","Oro","Cobre"], correctaa:1, premio:200 },
+                { enunciado:"¿Cuál NO es un lenguaje de programación?", opciones:["HTML","Java","Python","PHP"], correctaa:0, premio:200 },
+                { enunciado:"¿Qué significa HTML?", opciones:["HyperText Markup Language","HighText Machine Language","Hyper Transfer Mark","Home Tool Markup"], correctaa:0, premio:200 },
+                { enunciado:"¿Cuál es el país más grande del mundo?", opciones:["Alemania","Estados Unidos","China","Rusia"], correctaa:3, premio:200 },
+                { enunciado:"¿En qué continente se encuentra Egipto?", opciones:["Asia","Europa","África","América"], correctaa:2, premio:200 },
+                { enunciado:"¿En qué ciudad se encuentra el Museo del Louvre?", opciones:["Londres","Roma","Berlín","París"], correctaa:3, premio:200 },
+                { enunciado:"¿Qué órgano filtra la sangre en el cuerpo?", opciones:["Riñones","Pulmones","Estómago","Hígado"], correctaa:0, premio:200 },
+                { enunciado:"¿Qué gas necesitan las plantas para la fotosíntesis?", opciones:["Oxígeno","Dióxido de carbono","Helio","Nitrógeno"], correctaa:1, premio:200 },
+                { enunciado:"¿Qué palabra clave en Python define una función?", opciones:["function","def","func","define"], correctaa:1, premio:200 },
+                { enunciado:"¿Cómo se llama una variable que no cambia su valor en JavaScript?", opciones:["let","const","var","static"], correctaa:1, premio:200 },
+                { enunciado:"¿Qué es una clave primaria en una base de datos?", opciones:["La primera columna","Una contraseña","Un identificador único","Un índice"], correctaa:2, premio:200 }
+            ]),
+            medio: new Nivel("medio","MEDIO","#f5e642",[
+                { enunciado:"¿Qué método añade un elemento a un array en JS?", opciones:["push()","add()","insert()","append()"], correctaa:0, premio:300 },
+                { enunciado:"¿Qué país tiene más volcanes activos?", opciones:["Japón","Indonesia","Chile","Estados Unidos"], correctaa:1, premio:300 },
+                { enunciado:"¿Qué tipo de base de datos es MongoDB?", opciones:["Relacional","NoSQL","Jerárquica","Orientada a objetos"], correctaa:1, premio:300 },
+                { enunciado:"¿Qué método en Java se ejecuta al crear un objeto?", opciones:["main()","constructor()","init()","start()"], correctaa:1, premio:300 },
+                { enunciado:"¿Qué operador compara igualdad estricta en JavaScript?", opciones:["==","===","!=","<>"], correctaa:1, premio:300 },
+                { enunciado:"¿Qué palabra clave detiene un bucle?", opciones:["exit","stop","break","halt"], correctaa:2, premio:300 },
+                { enunciado:"¿En qué año comenzó la Primera Guerra Mundial?", opciones:["1920","1910","1914","1933"], correctaa:2, premio:300 },
+                { enunciado:"¿Quién fue el primer presidente del gobierno español tras Franco?", opciones:["Zapatero","Rajoy","Pedro Sánchez","Adolfo Suárez"], correctaa:3, premio:300 },
+                { enunciado:"¿Cuál es el metal más abundante en la corteza terrestre?", opciones:["Hierro","Aluminio","Cobre","Plata"], correctaa:1, premio:300 },
+                { enunciado:"¿Qué instrumento mide la velocidad del viento?", opciones:["Barómetro","Anemómetro","Termómetro","Voltímetro"], correctaa:1, premio:300 },
+                { enunciado:"¿Qué significa SQL JOIN?", opciones:["Combinar filas de varias tablas","Eliminar tablas","Crear tablas","Ordenar tablas"], correctaa:0, premio:300 },
+                { enunciado:"¿Cuál es el elemento más abundante en la corteza terrestre?", opciones:["Hierro","Nitrógeno","Silicio","Oxígeno"], correctaa:3, premio:300 }
+            ]),
+            dificil: new Nivel("dificil","DIFÍCIL","#ff8c00",[
+                { enunciado:"¿Qué estructura almacena pares clave-valor?", opciones:["Array","Map","Stack","Queue"], correctaa:1, premio:400 },
+                { enunciado:"¿Qué palabra clave en Java impide que una clase sea heredada?", opciones:["static","final","private","sealed"], correctaa:1, premio:400 },
+                { enunciado:"¿Qué civilización construyó Machu Picchu?", opciones:["Azteca","Maya","Inca","Olmeca"], correctaa:2, premio:400 },
+                { enunciado:"¿En qué año cayó el Imperio Romano de Occidente?", opciones:["476 d.C.","510 d.C.","73 d.C.","493 d.C."], correctaa:0, premio:400 },
+                { enunciado:"¿Quién escribió 'Cien años de soledad'?", opciones:["Mario Vargas Llosa","Gabriel García Márquez","Pablo Neruda","Jorge Luis Borges"], correctaa:1, premio:400 },
+                { enunciado:"¿Qué planeta tiene el día más largo del sistema solar?", opciones:["Mercurio","Venus","Marte","Júpiter"], correctaa:1, premio:400 },
+                { enunciado:"¿Qué científico propuso las tres leyes del movimiento planetario?", opciones:["Galileo Galilei","Johannes Kepler","Isaac Newton","Tycho Brahe"], correctaa:1, premio:400 },
+                { enunciado:"¿Qué país tiene más husos horarios?", opciones:["Estados Unidos","Rusia","China","Francia"], correctaa:3, premio:400 },
+                { enunciado:"¿Qué lenguaje se usa para consultas en bases de datos relacionales?", opciones:["Python","SQL","HTML","CSS"], correctaa:1, premio:400 },
+                { enunciado:"¿Cuál es la capital de Canadá?", opciones:["Toronto","Vancouver","Ottawa","Montreal"], correctaa:2, premio:400 },
+                { enunciado:"¿Cuál es el río más largo de Europa?", opciones:["Danubio","Volga","Rin","Tajo"], correctaa:1, premio:400 },
+                { enunciado:"¿Qué río atraviesa más países de África?", opciones:["Congo","Zambeze","Níger","Nilo"], correctaa:3, premio:400 }
+            ]),
+            muyDificil: new Nivel("muyDificil","EXTREMO","#ff2a6d",[
+                { enunciado:"¿En qué país se originó el ajedrez?", opciones:["Persia","India","China","Grecia"], correctaa:1, premio:500 },
+                { enunciado:"¿Qué matemático desarrolló la teoría de los logaritmos?", opciones:["Isaac Newton","John Napier","Carl Gauss","Leonhard Euler"], correctaa:1, premio:500 },
+                { enunciado:"¿Qué tratado puso fin a la Primera Guerra Mundial?", opciones:["Tratado de Utrecht","Tratado de París","Tratado de Versalles","Tratado de Tordesillas"], correctaa:2, premio:500 },
+                { enunciado:"¿Qué estructura de datos funciona con el principio LIFO?", opciones:["Queue","Stack","Tree","Graph"], correctaa:1, premio:500 },
+                { enunciado:"¿Qué físico propuso el principio de incertidumbre?", opciones:["Albert Einstein","Niels Bohr","Werner Heisenberg","Max Planck"], correctaa:2, premio:500 },
+                { enunciado:"¿Qué imperio fue gobernado por Mansa Musa?", opciones:["Imperio Songhai","Imperio de Malí","Imperio Otomano","Imperio Persa"], correctaa:1, premio:500 },
+                { enunciado:"¿Qué constante física representa la velocidad de la luz en el vacío?", opciones:["g","c","h","k"], correctaa:1, premio:500 },
+                { enunciado:"¿Qué científico descubrió la radiactividad natural en 1896?", opciones:["Marie Curie","Henri Becquerel","Ernest Rutherford","Niels Bohr"], correctaa:1, premio:500 },
+                { enunciado:"¿Qué tipo de excepción en Java debe declararse o manejarse obligatoriamente?", opciones:["Checked Exception","Runtime Exception","Error","NullPointerException"], correctaa:0, premio:500 },
+                { enunciado:"¿Qué elemento tiene el punto de fusión más alto de la Tabla Periódica?", opciones:["Titanio","Wolframio","Renio","Osmio"], correctaa:1, premio:500 },
+                { enunciado:"¿En qué año fue publicada la 'Crítica de la Razón Pura' de Kant?", opciones:["1762","1790","1781","1820"], correctaa:2, premio:500 },
+                { enunciado:"¿Qué filósofo presocrático sostenía que el Ápeiron era el principio de todo?", opciones:["Tales","Heráclito","Pitágoras","Anaximandro"], correctaa:3, premio:500 }
+            ])
+        }
 
 /* ════════════════════════════════════════════════
    CLASE: Juego
@@ -202,48 +202,48 @@ let juego = new Juego()
    ════════════════════════════════════════════════ */
 function actualizarEtiquetaNivel(){
     const nivel = juego.getNivelActual()
-    const elemento = document.getElementById("levelLabel")
+    const elemento = document.getElementById("etiquetaNivel")
     if(elemento && nivel){ elemento.textContent = nivel.nombre; elemento.style.color = nivel.color }
 }
 
 function actualizarEstadisticas(){
-    document.getElementById("money").innerText = juego.dinero
-    document.getElementById("lives").innerText = juego.vidas
+    document.getElementById("dinero").innerText = juego.dinero
+    document.getElementById("vidas").innerText = juego.vidas
 }
 
 function actualizarContadoresComodines(){
-    document.getElementById("countFiftyFifty").innerText      = juego.comodines.cincuentaCincuenta
-    document.getElementById("countCambiarPregunta").innerText  = juego.comodines.cambiarPregunta
-    document.getElementById("countTiempoExtra").innerText      = juego.comodines.tiempoExtra
-    document.getElementById("countDobleOportunidad").innerText = juego.comodines.dobleOportunidad
+    document.getElementById("contadorCincuentaCincuenta").innerText      = juego.comodines.cincuentaCincuenta
+    document.getElementById("contadorCambiarPregunta").innerText  = juego.comodines.cambiarPregunta
+    document.getElementById("contadorTiempoExtra").innerText      = juego.comodines.tiempoExtra
+    document.getElementById("contadorDobleOportunidad").innerText = juego.comodines.dobleOportunidad
 }
 
 function mostrarNotificacion(mensaje, tipo="info"){
     const notif = document.createElement("div")
-    notif.className = "game-toast toast-" + tipo
+    notif.className = "notificacion toast-" + tipo
     notif.innerText = mensaje
     document.body.appendChild(notif)
-    setTimeout(() => notif.classList.add("toast-visible"), 10)
-    setTimeout(() => { notif.classList.remove("toast-visible"); setTimeout(() => notif.remove(), 400) }, 2200)
+    setTimeout(() => notif.classList.add("notificacion-visible"), 10)
+    setTimeout(() => { notif.classList.remove("notificacion-visible"); setTimeout(() => notif.remove(), 400) }, 2200)
 }
 
 function ocultarTodo(){
     document.querySelector(".juego").style.display          = "none"
-    document.querySelector(".lifelines").style.display      = "none"
+    document.querySelector(".comodines").style.display      = "none"
     document.querySelector(".potenciadores").style.display  = "none"
-    document.getElementById("levelScreen").style.display    = "none"
-    document.getElementById("gameOverScreen").style.display = "none"
-    document.getElementById("victoryScreen").style.display  = "none"
-    document.getElementById("plantarScreen").style.display  = "none"
+    document.getElementById("pantallaTramo").style.display    = "none"
+    document.getElementById("pantallaDerrota").style.display = "none"
+    document.getElementById("pantallaVictoria").style.display  = "none"
+    document.getElementById("pantallaPlantarse").style.display  = "none"
 }
 
 /* ════════════════════════════════════════════════
    FLUJO DEL JUEGO
    ════════════════════════════════════════════════ */
 function comenzar(){
-    document.getElementById("btnEmpezar").classList.add("oculto")
-    document.getElementById("btnPlantar").classList.remove("oculto")
-    document.querySelector(".lifelines").style.display    = ""
+    document.getElementById("botonEmpezar").classList.add("oculto")
+    document.getElementById("botonPlantar").classList.remove("oculto")
+    document.querySelector(".comodines").style.display    = ""
     document.querySelector(".potenciadores").style.display = ""
 
     juego = new Juego()
@@ -278,7 +278,7 @@ function siguientePregunta(){
 }
 
 function mostrarPregunta(){
-    document.getElementById("question").innerText = juego.preguntaActual.enunciado
+    document.getElementById("pregunta").innerText = juego.preguntaActual.enunciado
     const contenedor = document.getElementById("respuestas")
     contenedor.innerHTML = ""
     const letras = ["A","B","C","D","E","F"]
@@ -299,7 +299,7 @@ function responder(indice){
     clearInterval(juego.intervalo)
 
     if(pregunta.esCorrecta(indice)){
-        botones[indice].classList.add("correct")
+        botones[indice].classList.add("correcta")
         const ganancia = pregunta.getPremio(juego.doblePuntosActivo)
         juego.dinero += ganancia
         setTimeout(() => {
@@ -307,13 +307,13 @@ function responder(indice){
             actualizarEstadisticas(); reiniciarPotenciadores(); siguientePregunta()
         }, 900)
     } else {
-        botones[indice].classList.add("incorrect")
-        botones[pregunta.correcta].classList.add("correct")
+        botones[indice].classList.add("incorrectaa")
+        botones[pregunta.correctaa].classList.add("correcta")
         setTimeout(() => {
             if(juego.escudoActivo){
                 mostrarNotificacion("🛡 ESCUDO ACTIVADO — Daño bloqueado", "shield")
                 juego.escudoActivo = false
-                document.getElementById("escudoIcono").style.visibility = "hidden"
+                document.getElementById("iconoEscudo").style.visibility = "hidden"
             } else {
                 const penalizacion = pregunta.getPenalizacion(juego.doblePuntosActivo)
                 juego.vidas -= penalizacion
@@ -335,10 +335,10 @@ function iniciarTemporizador(){
             juego.bonusTiempoRuleta > 0 ? "success" : "error")
         juego.bonusTiempoRuleta = 0
     }
-    document.getElementById("timer").innerText = juego.tiempo
+    document.getElementById("temporizador").innerText = juego.tiempo
     juego.intervalo = setInterval(() => {
         juego.tiempo--
-        document.getElementById("timer").innerText = juego.tiempo
+        document.getElementById("temporizador").innerText = juego.tiempo
         if(juego.tiempo <= 0){
             clearInterval(juego.intervalo)
             juego.vidas--; actualizarEstadisticas()
@@ -351,7 +351,7 @@ function iniciarTemporizador(){
 function continuarJuego(){
     ocultarTodo()
     document.querySelector(".juego").style.display         = ""
-    document.querySelector(".lifelines").style.display     = ""
+    document.querySelector(".comodines").style.display     = ""
     document.querySelector(".potenciadores").style.display = ""
 
     juego.indiceNivelActual++
@@ -376,20 +376,20 @@ function continuarJuego(){
 
 function plantarse(){
     clearInterval(juego.intervalo); ocultarTodo()
-    document.getElementById("plantarMoney").innerText = juego.dinero + " €"
-    document.getElementById("plantarScreen").style.display = "flex"
+    document.getElementById("plantarDinero").innerText = juego.dinero + " €"
+    document.getElementById("pantallaPlantarse").style.display = "flex"
 }
 
 function finJuego(){
     clearInterval(juego.intervalo); ocultarTodo()
-    document.getElementById("gameOverMoney").innerText = juego.dinero + " €"
-    document.getElementById("gameOverScreen").style.display = "flex"
+    document.getElementById("derrotaDinero").innerText = juego.dinero + " €"
+    document.getElementById("pantallaDerrota").style.display = "flex"
 }
 
 function mostrarVictoria(){
     ocultarTodo()
-    document.getElementById("victoryMoney").innerText = juego.dinero + " €"
-    document.getElementById("victoryScreen").style.display = "flex"
+    document.getElementById("victoriaDinero").innerText = juego.dinero + " €"
+    document.getElementById("pantallaVictoria").style.display = "flex"
 }
 
 function reiniciarJuego(){ location.reload() }
@@ -399,33 +399,33 @@ function reiniciarJuego(){ location.reload() }
    ════════════════════════════════════════════════ */
 function mostrarPantallaTramo(){
     ocultarTodo()
-    document.getElementById("levelScreen").style.display = "flex"
+    document.getElementById("pantallaTramo").style.display = "flex"
 
     juego.comodinesCompradosEnNivel = {
         cincuentaCincuenta:false, cambiarPregunta:false,
         tiempoExtra:false,        dobleOportunidad:false
     }
     juego.ruletaUsadaEsteTramo = false
-    const botonGirar = document.querySelector(".btn-spin")
+    const botonGirar = document.querySelector(".boton-girar")
     if(botonGirar){ botonGirar.disabled = false; botonGirar.style.opacity = "" }
 
     const nivel = juego.getNivelActual()
-    document.getElementById("levelCompletedName").innerText   = nivel.nombre
-    document.getElementById("levelCompletedName").style.color = nivel.color
-    document.getElementById("levelMoney").innerText = juego.dinero + " €"
+    document.getElementById("nombreNivelCompletado").innerText   = nivel.nombre
+    document.getElementById("nombreNivelCompletado").style.color = nivel.color
+    document.getElementById("dineroTramo").innerText = juego.dinero + " €"
 
     const porcentaje = Math.round((juego.indicePreguntaActual / 4) * 100)
-    document.getElementById("levelProgressBar").style.width = Math.min(porcentaje, 100) + "%"
+    document.getElementById("barraProgresoTramo").style.width = Math.min(porcentaje, 100) + "%"
 
     const siguienteIndice = juego.indiceNivelActual + 1
     if(siguienteIndice < juego.ordenNiveles.length){
         const siguienteNivel = juego.niveles[juego.ordenNiveles[siguienteIndice]]
-        document.getElementById("nextLevelName").innerText   = siguienteNivel.nombre
-        document.getElementById("nextLevelName").style.color = siguienteNivel.color
-        document.getElementById("btnContinueLevel").style.display = ""
+        document.getElementById("nombreSiguienteNivel").innerText   = siguienteNivel.nombre
+        document.getElementById("nombreSiguienteNivel").style.color = siguienteNivel.color
+        document.getElementById("botonContinuarNivel").style.display = ""
     } else {
-        document.getElementById("nextLevelName").innerText   = "VICTORIA"
-        document.getElementById("nextLevelName").style.color = "#f5e642"
+        document.getElementById("nombreSiguienteNivel").innerText   = "VICTORIA"
+        document.getElementById("nombreSiguienteNivel").style.color = "#f5e642"
     }
 
     construirPanelCompras()
@@ -435,8 +435,8 @@ function mostrarPantallaTramo(){
 
 function construirPanelCompras(){
     const coste = COSTES_COMODINES[juego.indiceNivelActual] || 100
-    document.getElementById("comodinCostLabel").innerText = coste + " €"
-    const contenedor = document.getElementById("comprarComodines")
+    document.getElementById("etiquetaCosteComodin").innerText = coste + " €"
+    const contenedor = document.getElementById("panelComprarComodines")
     contenedor.innerHTML = ""
 
     const lista = [
@@ -449,16 +449,16 @@ function construirPanelCompras(){
         const usos = juego.comodines[c.clave]
         const yaComprado = juego.comodinesCompradosEnNivel[c.clave]
         const boton = document.createElement("button")
-        boton.className = "buy-lifeline-btn"
+        boton.className = "boton-comprar-comodin"
         if(yaComprado){
-            boton.classList.add("buy-lifeline-bought"); boton.disabled = true
-            boton.innerHTML = `<span class="buy-label">${c.etiqueta}</span><span class="buy-cost">COMPRADO</span><span class="buy-stock">×1</span>`
+            boton.classList.add("comodin-comprado"); boton.disabled = true
+            boton.innerHTML = `<span class="etiqueta-compra">${c.etiqueta}</span><span class="coste-compra">COMPRADO</span><span class="stock-compra">×1</span>`
         } else if(usos > 0){
-            boton.classList.add("buy-lifeline-available"); boton.disabled = true
-            boton.innerHTML = `<span class="buy-label">${c.etiqueta}</span><span class="buy-cost">DISPONIBLE</span><span class="buy-stock">×${usos}</span>`
+            boton.classList.add("comodin-disponible"); boton.disabled = true
+            boton.innerHTML = `<span class="etiqueta-compra">${c.etiqueta}</span><span class="coste-compra">DISPONIBLE</span><span class="stock-compra">×${usos}</span>`
         } else {
-            boton.classList.add("buy-lifeline-spent")
-            boton.innerHTML = `<span class="buy-label">${c.etiqueta}</span><span class="buy-cost">${coste} €</span><span class="buy-stock">×0</span>`
+            boton.classList.add("comodin-gastado")
+            boton.innerHTML = `<span class="etiqueta-compra">${c.etiqueta}</span><span class="coste-compra">${coste} €</span><span class="stock-compra">×0</span>`
             boton.onclick = () => comprarComodin(c.clave, coste)
         }
         contenedor.appendChild(boton)
@@ -485,11 +485,11 @@ function cincuentaCincuenta(){
     }
     if(!juego.modoComodinesInfinitos){
         juego.comodines.usar("cincuentaCincuenta")
-        document.getElementById("countFiftyFifty").innerText = juego.comodines.cincuentaCincuenta
+        document.getElementById("contadorCincuentaCincuenta").innerText = juego.comodines.cincuentaCincuenta
     }
     let botones = document.querySelectorAll("#respuestas button"), eliminadas = 0
     for(let i = 0; i < botones.length; i++){
-        if(i !== juego.preguntaActual.correcta && eliminadas < 2){
+        if(i !== juego.preguntaActual.correctaa && eliminadas < 2){
             botones[i].disabled = true; botones[i].style.opacity = "0.3"; eliminadas++
         }
     }
@@ -501,7 +501,7 @@ function tiempoExtra(){
     }
     if(!juego.modoComodinesInfinitos){
         juego.comodines.usar("tiempoExtra")
-        document.getElementById("countTiempoExtra").innerText = juego.comodines.tiempoExtra
+        document.getElementById("contadorTiempoExtra").innerText = juego.comodines.tiempoExtra
     }
     juego.tiempo += 15
 }
@@ -512,10 +512,10 @@ function dobleOportunidad(){
     }
     if(!juego.modoComodinesInfinitos){
         juego.comodines.usar("dobleOportunidad")
-        document.getElementById("countDobleOportunidad").innerText = juego.comodines.dobleOportunidad
+        document.getElementById("contadorDobleOportunidad").innerText = juego.comodines.dobleOportunidad
     }
     juego.escudoActivo = true
-    document.getElementById("escudoIcono").style.visibility = "visible"
+    document.getElementById("iconoEscudo").style.visibility = "visible"
 }
 
 function cambiarPregunta(){
@@ -530,7 +530,7 @@ function cambiarPregunta(){
     if(disponibles.length === 0){ mostrarNotificacion("⚠ No hay más preguntas disponibles en este tramo", "error"); return }
 
     juego.comodines.usar("cambiarPregunta")
-    document.getElementById("countCambiarPregunta").innerText = juego.comodines.cambiarPregunta
+    document.getElementById("contadorCambiarPregunta").innerText = juego.comodines.cambiarPregunta
 
     const indiceElegido = disponibles[Math.floor(Math.random() * disponibles.length)]
     juego.indicesGrupoJugados.push(indiceElegido)
@@ -547,9 +547,9 @@ function comodinesInfinitos(){
     juego.dinero -= coste
     juego.comodinesInfinitosUsadoEsteTramo = true
     juego.modoComodinesInfinitos = true
-    document.getElementById("countFiftyFifty").innerText      = "∞"
-    document.getElementById("countTiempoExtra").innerText      = "∞"
-    document.getElementById("countDobleOportunidad").innerText = "∞"
+    document.getElementById("contadorCincuentaCincuenta").innerText      = "∞"
+    document.getElementById("contadorTiempoExtra").innerText      = "∞"
+    document.getElementById("contadorDobleOportunidad").innerText = "∞"
     actualizarEstadisticas()
     mostrarNotificacion("♾️ Comodines infinitos — solo esta pregunta (300 €)", "success")
 }
@@ -592,7 +592,7 @@ const SECTORES_RULETA = [
 let anguloRuleta = 0, ruletaGirando = false
 
 function dibujarRuleta(angulo){
-    const lienzo = document.getElementById("ruleta")
+    const lienzo = document.getElementById("lienzo-ruleta")
     if(!lienzo) return
     const ctx = lienzo.getContext("2d")
     const cx = lienzo.width/2, cy = lienzo.height/2, r = cx - 8
@@ -634,10 +634,10 @@ function girarRuleta(){
     if(juego.ruletaUsadaEsteTramo){ mostrarNotificacion("⚠ Solo un giro de ruleta por fin de tramo", "error"); return }
     ruletaGirando = true
     juego.ruletaUsadaEsteTramo = true
-    const botonGirar = document.querySelector(".btn-spin")
+    const botonGirar = document.querySelector(".boton-girar")
     if(botonGirar){ botonGirar.disabled = true; botonGirar.style.opacity = "0.4" }
 
-    document.getElementById("ruletaResultado").textContent = "⟳ Girando..."
+    document.getElementById("resultadoRuleta").textContent = "⟳ Girando..."
     const giroTotal = Math.PI*2*(5+Math.random()*4), duracion = 3200
     const tiempoInicio = performance.now(), anguloInicio = anguloRuleta
 
@@ -652,7 +652,7 @@ function girarRuleta(){
         const normalizado = (((-anguloRuleta-Math.PI/2)%(2*Math.PI))+2*Math.PI)%(2*Math.PI)
         const indice = Math.floor(normalizado/porcion)%SECTORES_RULETA.length
         const resultado = SECTORES_RULETA[indice]
-        document.getElementById("ruletaResultado").textContent = "▶ " + resultado.texto
+        document.getElementById("resultadoRuleta").textContent = "▶ " + resultado.texto
         ruletaGirando = false
 
         const texto = resultado.texto
@@ -667,8 +667,8 @@ function girarRuleta(){
             mostrarNotificacion("🎲 Ruleta: "+texto, delta < 0 ? "error" : "success")
             if(juego.vidas <= 0) setTimeout(() => {
                 ocultarTodo()
-                document.getElementById("gameOverMoney").innerText = juego.dinero + " €"
-                document.getElementById("gameOverScreen").style.display = "flex"
+                document.getElementById("derrotaDinero").innerText = juego.dinero + " €"
+                document.getElementById("pantallaDerrota").style.display = "flex"
             }, 1200)
         } else if(texto.includes("s")){
             const valor = parseInt(texto.replace(/[^0-9]/g,"")) * (texto.startsWith("+") ? 1 : -1)
@@ -693,7 +693,7 @@ window.addEventListener("load", () => {
         "// PROTOCOLO DE INVERSIÓN ACTIVO"
     ]
     let indiceMensaje = 0, indiceCaracter = 0
-    const elementoTexto = document.getElementById("bootText")
+    const elementoTexto = document.getElementById("textoArranque")
     function escribirSiguiente(){
         if(indiceCaracter < mensajes[indiceMensaje].length){
             elementoTexto.textContent = mensajes[indiceMensaje].slice(0, ++indiceCaracter)
@@ -712,11 +712,11 @@ window.addEventListener("load", () => {
     }).observe(document.getElementById("respuestas"), {childList:true})
 
     // Aviso visual cuando quedan 8 segundos
-    const elementoTemporizador = document.getElementById("timer")
-    const elementoEstadisticas = document.querySelector(".stats")
+    const elementoTemporizador = document.getElementById("temporizador")
+    const elementoEstadisticas = document.querySelector(".estadisticas")
     new MutationObserver(() => {
         parseInt(elementoTemporizador.textContent, 10) <= 8
-            ? elementoEstadisticas.classList.add("timer-warning")
-            : elementoEstadisticas.classList.remove("timer-warning")
+            ? elementoEstadisticas.classList.add("aviso-temporizador")
+            : elementoEstadisticas.classList.remove("aviso-temporizador")
     }).observe(elementoTemporizador, {childList:true, characterData:true, subtree:true})
 })
